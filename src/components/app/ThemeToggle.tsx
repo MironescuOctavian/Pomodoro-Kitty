@@ -1,0 +1,36 @@
+import { createSignal, onSettled } from "solid-js";
+
+export default function ThemeToggle() {
+  const [night, setNight] = createSignal(false);
+  const apply = (enabled: boolean) => {
+    document.documentElement.dataset["theme"] = enabled ? "night" : "day";
+    setNight(enabled);
+  };
+  onSettled(() => {
+    try {
+      apply(localStorage.getItem("kitty-theme") === "night");
+    } catch {
+      /* Theme works without storage. */
+    }
+  });
+  return (
+    <button
+      type="button"
+      class="theme-toggle kitty-button"
+      aria-pressed={night() ? "true" : "false"}
+      aria-label={night() ? "Switch to day theme" : "Switch to comfy night theme"}
+      onClick={() => {
+        const enabled = !night();
+        apply(enabled);
+        try {
+          localStorage.setItem("kitty-theme", enabled ? "night" : "day");
+        } catch {
+          /* Keep the current session's choice. */
+        }
+      }}
+    >
+      <span aria-hidden="true">{night() ? "☀" : "☾"}</span>
+      {night() ? "Day mode" : "Comfy night"}
+    </button>
+  );
+}

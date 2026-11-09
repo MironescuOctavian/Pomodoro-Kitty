@@ -1,0 +1,55 @@
+{
+  "name": "minimalist-pomodoro",
+  "version": "0.0.0",
+  "private": true,
+  "description": "A minimalist Pomodoro timer built with Solid and TypeScript.",
+  "keywords": [
+    "pomodoro",
+    "solid",
+    "typescript"
+  ],
+  "author": {
+    "name": "Mironescu Octavian",
+    "email": "contact@octavianmironescu.com",
+    "url": "https://octavianmironescu.com"
+  },
+  "type": "module",
+  "imports": {
+    "#*": [
+      "./src/*",
+      "./src/*.ts",
+      "./src/*.tsx",
+      "./src/*/index.ts",
+      "./src/*/index.tsx"
+    ]
+  },
+  "scripts": {
+    "prepare": "vp config",
+    "generate-types": "cf workers types",
+    "dev": "vp dev",
+    "build": "vp build",
+    "preview": "vp preview",
+    "deploy": "cf deploy",
+    "check": "pnpm audit && cf workers types && vp check --fix"
+  },
+  "dependencies": {
+    "@rimelight/i18n": "0.1.20",
+    "@solidjs/router": "2.0.0-next.43",
+    "@solidjs/web": "2.0.0-rc.20",
+    "hono": "5.0.0-rc.1",
+    "solid-js": "2.0.0-rc.20",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "2.0.0-beta.v.8",
+    "@rimelight/config": "0.0.45",
+    "@solidjs/vite-plugin": "3.0.0-next.54",
+    "cf": "1.0.0-beta.26",
+    "filesystem-routing": "0.4.2",
+    "typescript": "7.1.0-beta",
+    "unocss": "66.12.0",
+    "vite": "npm:@voidzero-dev/vite-plus-core@1.4.0",
+    "vite-plus": "1.4.0"
+  },
+  "packageManager": "pnpm@12.16.1"
+}

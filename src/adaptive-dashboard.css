@@ -1,0 +1,702 @@
+/* Fit the dashboard to desktop height; scroll only lists and guide content. */
+.accessory-progress {
+  font-size: 11px;
+  color: var(--soft-ink);
+  line-height: 1.5;
+}
+.cozy-theme .menu-toolbar {
+  flex-wrap: wrap;
+}
+.guide-container::details-content {
+  content-visibility: hidden;
+}
+.guide-container[open]::details-content {
+  content-visibility: visible;
+}
+.guide-container > .guide-title {
+  cursor: pointer;
+}
+.cozy-theme .guide-content {
+  padding: 10px 12px;
+}
+.guide-content > details {
+  padding-block: 8px;
+}
+.guide-content p {
+  font-size: 12px;
+  line-height: 1.65;
+}
+.guide-now {
+  padding: 9px 11px;
+  margin-bottom: 8px;
+}
+.guide-content .guide-footnote {
+  font-size: 11px;
+}
+.cozy-theme .sidebar-explanation .menu-help-copy p {
+  font-size: 13px;
+  line-height: 1.6;
+}
+.cozy-theme .earned-note {
+  position: absolute;
+  right: 12px;
+  bottom: 2px;
+  margin: 0;
+  font-size: 11px;
+}
+@media (min-width: 1200px) and (min-height: 740px) {
+  .cozy-theme .workspace {
+    overflow: hidden;
+    padding-block: 6px 10px;
+  }
+  .cozy-theme .daily-fact-section {
+    flex: 0 0 auto;
+    margin-bottom: 8px;
+  }
+  .cozy-theme .daily-fact {
+    min-height: 38px;
+    padding-block: 3px;
+  }
+  .cozy-theme .fact-art-placeholder {
+    height: 26px;
+    width: 32px;
+  }
+  .dashboard-with-guide {
+    flex: 1;
+    min-height: 0;
+    grid-template-columns: minmax(0, 1fr) 250px;
+    align-items: stretch;
+    gap: 16px;
+  }
+  .cozy-theme .focus-layout {
+    height: 100%;
+    min-height: 0;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: stretch;
+    padding: 12px;
+    gap: 14px;
+  }
+  .cozy-theme .focus-desk {
+    height: 100%;
+    max-height: none;
+    min-height: 0;
+    gap: 10px;
+  }
+  .cozy-theme .focus-desk > .timer-sheet {
+    flex: 1;
+    min-height: 0;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .cozy-theme .desk-title {
+    font-size: clamp(23px, 2vw, 29px);
+    line-height: 1.1;
+    margin: 0;
+  }
+  .cozy-theme .desk-subtitle {
+    font-size: 18px;
+    line-height: 1.2;
+    margin: 2px 0 6px;
+  }
+  .cozy-theme .mode-switch {
+    margin: 0 auto;
+  }
+  .cozy-theme .mode-switch button {
+    padding-block: 4px;
+    font-size: 14px;
+  }
+  .cozy-theme .timer-sheet .focus-clock {
+    font-size: clamp(64px, calc(100dvh - 720px), 106px);
+    line-height: 1;
+    margin: 10px 0;
+  }
+  .current-task-caption {
+    margin: 0 auto 7px;
+    min-height: 16px;
+    font-size: 12px;
+    line-height: 1.3;
+  }
+  .cozy-theme .timer-progress {
+    height: 7px;
+  }
+  .cozy-theme .session-caption {
+    margin: 6px 0 9px;
+    font-size: 11px;
+    line-height: 1.4;
+  }
+  .cozy-theme .timer-actions {
+    gap: 10px;
+  }
+  .cozy-theme .timer-actions .start-button {
+    min-height: 38px;
+    padding: 8px 14px;
+    font-size: 18px;
+  }
+  .cozy-theme .timer-actions .reset-button {
+    min-width: 72px;
+    min-height: 36px;
+    padding: 6px 10px;
+    font-size: 15px;
+  }
+  .cozy-theme .timer-reward {
+    font-size: 11px;
+    line-height: 1.4;
+    margin-top: 7px;
+  }
+  .cozy-theme .task-section {
+    flex: 0 0 auto;
+    padding: 0 12px 8px;
+  }
+  .cozy-theme .task-header {
+    padding: 7px 12px;
+    margin: 0 -12px 5px;
+  }
+  .cozy-theme .task-header .kitty-heading {
+    font-size: 20px;
+    padding: 0;
+  }
+  .cozy-theme .task-header .task-details {
+    font-size: 11px;
+  }
+  .cozy-theme .task-list {
+    height: clamp(64px, calc(100dvh - 760px), 114px);
+    min-height: 0;
+    max-height: 114px;
+  }
+  .cozy-theme .task-item,
+  .cozy-theme .task-item label {
+    height: 32px;
+    min-height: 32px;
+  }
+  .cozy-theme .task-item {
+    margin-bottom: 3px;
+  }
+  .cozy-theme .task-item label {
+    font-size: 12px;
+  }
+  .cozy-theme .task-form {
+    grid-template-columns: minmax(0, 1fr) 34px;
+  }
+  .cozy-theme .task-form input,
+  .cozy-theme .task-form button {
+    height: 32px;
+    min-height: 32px;
+  }
+  .cozy-theme .task-add-count {
+    grid-column: 1 / -1;
+    font-size: 10px;
+    margin: 0;
+    line-height: 1.2;
+  }
+  .cozy-theme .task-form {
+    gap: 3px 7px;
+  }
+  .cozy-theme .task-reward-notice:not(:empty),
+  .task-daily-limit {
+    font-size: 10px;
+    line-height: 1.3;
+    margin: 3px 0 0;
+  }
+  .today-focus {
+    flex: 0 0 auto;
+  }
+  .today-focus h2 {
+    padding: 7px 12px;
+    font-size: 20px;
+  }
+  .focus-metrics {
+    padding: 8px 12px;
+  }
+  .focus-metrics strong {
+    font-size: 22px;
+  }
+  .focus-metrics span {
+    font-size: 11px;
+  }
+  .daily-goal {
+    margin-inline: 12px;
+    padding: 6px 0 9px;
+    gap: 5px;
+    font-size: 11px;
+  }
+  .goal-picker select {
+    padding: 3px 5px;
+    font-size: 11px;
+  }
+  .goal-segments span {
+    height: 7px;
+  }
+  .cozy-theme .companion {
+    height: 100%;
+    min-height: 0;
+    padding: 10px 12px;
+  }
+  .cozy-theme .companion-upper {
+    margin: 7px 0 10px;
+    grid-template-columns: minmax(0, 1fr) 105px;
+    gap: 8px;
+  }
+  .cozy-theme .condition-trigger {
+    min-height: 28px;
+    padding-block: 2px;
+  }
+  .cozy-theme .shop-header > .kitty-muted {
+    display: none;
+  }
+  .cozy-theme .shop-header {
+    padding: 6px 10px;
+  }
+  .cozy-theme .companion-panel .shop-header .kitty-heading {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 18px;
+    line-height: 1.1;
+    margin: 0;
+  }
+  .cozy-theme .menu-toolbar .shop-categories {
+    padding: 0;
+    border: 0;
+  }
+  .cozy-theme .accessory-progress .menu-help-button {
+    padding: 0 3px;
+  }
+  .cozy-theme .menu-toolbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    padding: 5px 8px;
+    gap: 4px;
+  }
+  .cozy-theme .menu-toolbar .shop-categories {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: start;
+  }
+  .cozy-theme .menu-toolbar .collection-remove,
+  .cozy-theme .menu-toolbar .coat-filter {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .cozy-theme .menu-toolbar .accessory-progress {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    font-size: 10px;
+    line-height: 1.2;
+  }
+  .cozy-theme .collection-remove {
+    font-size: 11px;
+    padding: 4px 6px;
+    min-height: 28px;
+  }
+  .cozy-theme .shop-categories .shop-category {
+    font-size: 12px;
+    min-height: 27px;
+    padding: 4px 7px;
+  }
+  .cozy-theme .companion-upper .cat-art-placeholder {
+    height: clamp(130px, calc(100dvh - 660px), 276px);
+  }
+  .cozy-theme .condition-trigger {
+    font-size: 11px;
+  }
+  .cozy-theme .condition-trigger .art-preview {
+    width: 21px;
+    height: 21px;
+  }
+  .cozy-theme .companion-controls {
+    flex: 1;
+    min-height: 0;
+    gap: 10px;
+  }
+  .cozy-theme .companion-tabs button {
+    min-height: 36px;
+    height: 36px;
+    font-size: 14px;
+    padding: 4px;
+  }
+  .cozy-theme .companion-panel,
+  .cozy-theme .companion-panel:has(.shop-panel) {
+    flex: 1;
+    height: auto;
+    min-height: 100px;
+    max-height: none;
+  }
+  .cozy-theme .menu-header {
+    padding: 8px 12px;
+  }
+  .cozy-theme .companion-panel .menu-header .kitty-heading {
+    font-size: 20px;
+  }
+  .cozy-theme .companion-panel .menu-header .kitty-muted {
+    font-size: 11px;
+  }
+  .cozy-theme .care-page .care-row {
+    min-height: 65px;
+    padding-block: 8px;
+  }
+  .break-rewards h3 {
+    font-size: 20px;
+    padding: 7px 12px;
+  }
+  .break-reward-row {
+    padding: 7px 12px;
+  }
+  .break-reward-label {
+    margin-bottom: 4px;
+    font-size: 11px;
+  }
+  .break-reward-label strong {
+    font-size: 14px;
+  }
+  .break-rewards > .menu-help-button {
+    font-size: 11px;
+    margin-bottom: 4px;
+    padding-block: 1px;
+  }
+  .game-guide {
+    display: grid;
+    grid-template-rows: minmax(100px, 1fr) 150px 155px;
+    gap: 12px;
+    min-height: 0;
+  }
+  .game-guide > section,
+  .game-guide > details {
+    margin: 0;
+    min-height: 0;
+    overflow-y: auto;
+  }
+  .game-guide > .sidebar-explanation,
+  .game-guide > .session-history {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .sidebar-explanation header,
+  .session-history header {
+    flex: 0 0 auto;
+  }
+  .sidebar-explanation .menu-help-copy,
+  .session-history .history-list {
+    flex: 1;
+    min-height: 0;
+    max-height: none;
+    overflow-y: auto;
+  }
+  .guide-title {
+    padding: 10px 12px;
+    font-size: 21px;
+  }
+  .guide-container > .guide-title {
+    cursor: pointer;
+  }
+  .sidebar-explanation header {
+    padding: 9px 12px;
+  }
+  .sidebar-explanation h3 {
+    font-size: 19px;
+  }
+  .explanation-placeholder {
+    padding: 12px;
+  }
+  .session-history header {
+    padding: 9px 12px;
+  }
+  .session-history h3 {
+    font-size: 19px;
+  }
+  .history-list {
+    max-height: 95px;
+  }
+}
+/* A phone uses normal document flow inside the shell, including its footer. */
+@media (min-width: 1200px) and (min-height: 740px) and (max-height: 900px) {
+  .cozy-theme .focus-layout {
+    padding: 9px;
+    gap: 10px;
+  }
+  .cozy-theme .focus-desk {
+    gap: 7px;
+  }
+  .cozy-theme .focus-desk > .timer-sheet {
+    padding: 8px 12px;
+    flex: 1;
+    min-height: 245px;
+  }
+  .cozy-theme .desk-title {
+    font-size: 23px;
+  }
+  .cozy-theme .desk-subtitle {
+    display: none;
+  }
+  .cozy-theme .timer-sheet .focus-clock {
+    font-size: 64px;
+    margin-block: 5px;
+  }
+  .cozy-theme .mode-switch button {
+    font-size: 12px;
+    padding-block: 3px;
+  }
+  .cozy-theme .session-caption {
+    margin-block: 3px 5px;
+  }
+  .cozy-theme .timer-reward {
+    margin-top: 5px;
+    font-size: 10px;
+  }
+  .cozy-theme .timer-actions .start-button {
+    min-height: 32px;
+    padding: 5px 10px;
+    font-size: 16px;
+  }
+  .cozy-theme .timer-actions .reset-button {
+    min-height: 32px;
+    font-size: 13px;
+  }
+  .cozy-theme .task-section {
+    padding-bottom: 5px;
+  }
+  .cozy-theme .task-header {
+    padding-block: 4px;
+    margin-bottom: 3px;
+  }
+  .cozy-theme .task-header .kitty-heading {
+    font-size: 18px;
+  }
+  .cozy-theme .task-list {
+    height: 36px;
+    max-height: 36px;
+  }
+  .cozy-theme .task-entry {
+    padding: 3px 0 0;
+  }
+  .cozy-theme .task-form input,
+  .cozy-theme .task-form button {
+    height: 28px;
+    min-height: 28px;
+  }
+  .cozy-theme .task-form input {
+    padding-block: 4px;
+    font-size: 12px;
+  }
+  .cozy-theme .task-form {
+    border: 0;
+  }
+  .cozy-theme .task-daily-limit {
+    display: none;
+  }
+  .today-focus h2 {
+    display: none;
+  }
+  .focus-metrics {
+    padding: 6px 10px;
+  }
+  .focus-metrics strong {
+    font-size: 18px;
+    line-height: 1;
+  }
+  .focus-metrics span {
+    font-size: 10px;
+    line-height: 1.2;
+  }
+  .focus-metrics > div {
+    gap: 2px;
+  }
+  .daily-goal {
+    padding: 5px 0 6px;
+    margin-inline: 10px;
+    line-height: 1.2;
+    gap: 3px;
+  }
+  .goal-picker select {
+    font-size: 10px;
+    padding-block: 2px;
+  }
+  .goal-segments span {
+    height: 5px;
+  }
+  .cozy-theme .companion {
+    padding: 8px 10px;
+  }
+  .cozy-theme .companion-topline {
+    min-height: 26px;
+  }
+  .cozy-theme .cat-name h2 {
+    font-size: 23px;
+  }
+  .cozy-theme .companion-upper {
+    margin-block: 4px 6px;
+  }
+  .cozy-theme .companion-upper .cat-art-placeholder {
+    height: 90px;
+    font-size: 10px;
+  }
+  .cozy-theme .companion-controls {
+    gap: 7px;
+  }
+  .cozy-theme .companion-tabs button {
+    min-height: 31px;
+    height: 31px;
+    font-size: 12px;
+  }
+  .cozy-theme .companion-tabs .art-preview {
+    width: 18px;
+    height: 18px;
+  }
+  .cozy-theme .companion-panel,
+  .cozy-theme .companion-panel:has(.shop-panel) {
+    min-height: 110px;
+  }
+  .break-rewards h3 {
+    font-size: 17px;
+    padding: 4px 10px;
+  }
+  .break-rewards {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .break-rewards h3 {
+    grid-column: 1 / -1;
+  }
+  .break-rewards > .menu-help-button {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+  .break-reward-row + .break-reward-row {
+    border-top: 0;
+    border-left: 1px solid var(--rule);
+  }
+  .cozy-theme .companion-panel > .purchase-page {
+    overflow-y: auto;
+    justify-content: flex-start;
+    padding-block: 12px;
+  }
+  .cozy-theme .purchase-page > * {
+    flex-shrink: 0;
+  }
+  .break-reward-row {
+    padding: 4px 10px;
+    gap: 7px;
+    grid-template-columns: 18px minmax(0, 1fr);
+  }
+  .break-reward-row > .art-preview {
+    width: 18px;
+    height: 18px;
+  }
+  .break-reward-label {
+    margin-bottom: 2px;
+    font-size: 10px;
+    line-height: 1.2;
+  }
+  .break-reward-label strong {
+    font-size: 12px;
+  }
+  .break-reward-row progress {
+    height: 5px;
+  }
+  .game-guide {
+    grid-template-rows: minmax(80px, 1fr) 130px 120px;
+    gap: 8px;
+  }
+  .history-list {
+    max-height: 63px;
+  }
+}
+@media (max-width: 1199px) {
+  .app-shell {
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: block;
+  }
+  .app-shell #main-content {
+    overflow: visible;
+    flex: none;
+  }
+  .cozy-theme .workspace {
+    overflow: visible;
+    display: block;
+    padding-bottom: 18px;
+  }
+  .dashboard-with-guide {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .game-guide {
+    max-width: 680px;
+    width: 100%;
+    margin-inline: auto;
+  }
+  .guide-container > .guide-title {
+    cursor: pointer;
+    list-style: revert;
+  }
+  .cozy-theme .focus-layout {
+    height: auto;
+  }
+}
+@media (max-width: 700px) {
+  .cozy-theme .header-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+    padding-block: 10px;
+  }
+  .cozy-theme .header-actions {
+    display: contents;
+  }
+  .cozy-theme .header-inner .app-brand {
+    grid-column: 1;
+    grid-row: 1;
+    font-size: 21px;
+    white-space: nowrap;
+  }
+  .cozy-theme .theme-toggle {
+    grid-column: 2;
+    grid-row: 1;
+    min-height: 32px;
+    font-size: 12px;
+    padding: 5px 8px;
+  }
+  .cozy-theme .header-pocket-money {
+    grid-column: 1;
+    grid-row: 2;
+    min-width: 0;
+    padding: 4px 6px;
+    gap: 6px;
+    justify-self: start;
+  }
+  .header-pocket-money strong {
+    font-size: 13px;
+  }
+  .header-pocket-money small {
+    display: none;
+  }
+  .header-pocket-money .art-preview {
+    width: 22px;
+    height: 22px;
+  }
+  .cozy-theme .header-pocket-money .claim-button {
+    min-height: 28px;
+    font-size: 12px;
+    padding: 4px 7px;
+  }
+  .cozy-theme .shell-contact {
+    grid-column: 2;
+    grid-row: 2;
+    min-height: 32px;
+    padding: 5px 8px;
+    font-size: 13px;
+    text-align: center;
+  }
+  .cozy-theme .footer-main .app-brand {
+    white-space: nowrap;
+    font-size: 18px;
+  }
+  .cozy-theme .footer-main {
+    padding-block: 20px;
+  }
+  .cozy-theme .timer-sheet .focus-clock {
+    font-size: 90px;
+  }
+}

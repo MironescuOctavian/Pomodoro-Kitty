@@ -1,0 +1,76 @@
+.unavailable-reason {
+  color: var(--soft-ink);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.cozy-theme .companion-panel > .purchase-page {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  padding: 24px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: var(--sheet);
+  text-align: center;
+}
+.purchase-page h3 {
+  margin: 0;
+  max-width: 100%;
+  font: 500 23px/1.25 var(--display);
+  overflow-wrap: anywhere;
+}
+.purchase-page p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+}
+.purchase-page .purchase-balance {
+  font-size: 13px;
+  color: var(--soft-ink);
+}
+.purchase-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.purchase-swatch {
+  width: 64px;
+  height: 48px;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+}
+.purchase-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: min(100%, 320px);
+  margin-top: 8px;
+}
+.cozy-theme .purchase-actions .kitty-button {
+  min-height: 42px;
+  min-width: 0;
+  padding: 9px 10px;
+  font-size: 15px;
+  white-space: normal;
+}
+.cozy-theme .purchase-actions .claim-button {
+  background: var(--honey);
+  border-color: var(--frame-dark);
+}
+@media (max-width: 520px) {
+  .cozy-theme .companion-panel > .purchase-page {
+    padding: 18px 14px;
+    gap: 10px;
+  }
+  .purchase-page h3 {
+    font-size: 21px;
+  }
+}
