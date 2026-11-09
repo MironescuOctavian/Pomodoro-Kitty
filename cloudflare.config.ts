@@ -2,7 +2,7 @@ import { bindings, defineConfig } from "cf/config";
 
 export default defineConfig({
   worker: {
-    name: "minimalist-pomodoro",
+    name: "pomodoro-kitty",
     compatibilityDate: "2026-10-01",
     entrypoint: "./src/fetch.ts",
     observability: {

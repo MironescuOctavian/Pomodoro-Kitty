@@ -1,7 +1,8 @@
 import { defineConfig, presetWind3 } from "unocss";
+import { presetKitty } from "./uno/preset";
 
 export default defineConfig({
-  presets: [presetWind3()],
+  presets: [presetWind3(), presetKitty()],
   theme: {
     fontFamily: {
       sans: '"Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif',

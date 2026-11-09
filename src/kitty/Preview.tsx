@@ -1,24 +1,16 @@
-import { iconCells, type IconName } from "./icons";
-import { iconFrames } from "./iconFrames";
+import { coatCatalog } from "./coats";
 
 export default function Preview(props: { item: string; color?: string }) {
-  const cell = () => iconCells[props.item as IconName] ?? iconCells.medals;
-  const frame = () => iconFrames[cell()]!;
+  const coat = () => coatCatalog.findIndex((entry) => entry.swatch === props.color);
   return (
     <span
-      class={props.item === "coat" ? "art-preview coat-swatch" : "art-preview icon-tile"}
+      class={
+        props.item === "coat"
+          ? `art-preview coat-swatch coat-preview-${coat()}`
+          : "art-preview icon-tile artwork-slot"
+      }
+      data-artwork={props.item}
       aria-hidden="true"
-      style={props.item === "coat" ? { background: props.color || "var(--paper)" } : undefined}
-    >
-      {props.item !== "coat" && (
-        <span
-          class="pixel-icon"
-          style={{
-            "background-size": `${frame()[0]}% ${frame()[0]}%`,
-            "background-position": `${frame()[1]}% ${frame()[2]}%`,
-          }}
-        />
-      )}
-    </span>
+    ></span>
   );
 }

@@ -1,8 +1,8 @@
 {
-  "name": "minimalist-pomodoro",
+  "name": "pomodoro-kitty",
   "version": "0.0.0",
   "private": true,
-  "description": "A minimalist Pomodoro timer built with Solid and TypeScript.",
+  "description": "A cozy Pomodoro timer and virtual cat companion built with Solid and TypeScript.",
   "keywords": [
     "pomodoro",
     "solid",
@@ -30,7 +30,8 @@
     "build": "vp build",
     "preview": "vp preview",
     "deploy": "cf deploy",
-    "check": "pnpm audit && cf workers types && vp check --fix"
+    "check": "pnpm audit && cf workers types && vp check --fix",
+    "test": "node --test src/kitty/game.test.mjs"
   },
   "dependencies": {
     "@rimelight/i18n": "0.1.20",

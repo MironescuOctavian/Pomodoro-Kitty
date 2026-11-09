@@ -29,7 +29,6 @@ export default function ThemeToggle() {
         }
       }}
     >
-      <span aria-hidden="true">{night() ? "☀" : "☾"}</span>
       {night() ? "Day mode" : "Comfy night"}
     </button>
   );

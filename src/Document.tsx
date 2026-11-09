@@ -2,21 +2,6 @@ import type { ParentProps } from "solid-js";
 import { HydrationScript } from "@solidjs/web";
 import { getLocaleInfo } from "@rimelight/i18n";
 import "virtual:uno.css";
-import "./styles.css";
-import "./cozy.css";
-import "./companion.css";
-import "./focus-desk.css";
-import "./menus.css";
-import "./pixel-icons.css";
-import "./interaction-polish.css";
-import "./viewport-layout.css";
-import "./compact-focus.css";
-import "./ui-consistency.css";
-import "./dashboard-redesign.css";
-import "./dashboard-polish.css";
-import "./theme-polish.css";
-import "./adaptive-dashboard.css";
-import "./progress-layout.css";
 
 export default function Document(props: ParentProps) {
   return (
