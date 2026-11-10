@@ -2,187 +2,185 @@
 
 **A little focus. A little care. A cozy companion.**
 
-A Pomodoro timer with a virtual cat, a task list, and a gentle progression loop.
-Finish a session, earn coins, and make your companion's day a little brighter.
+A Pomodoro workspace where your cat keeps you company. Finish a session, earn
+coins, take a water break, and treat your companion to a snack or a new outfit.
+Invite a friend to share the timer and give their cat a spot beside yours.
 
-Built with **Solid 2 · TypeScript · Vite+ · UnoCSS · Cloudflare Workers**.
+Built with **Solid 2 · TypeScript · Vite+ · UnoCSS · Hono · Cloudflare Workers**.
 
----
+## In your workspace
 
-## Meet your focus companion
+- **Focus timer:** 25-minute focus sessions, 5-minute short breaks, and 15-minute
+  long breaks. Pause, resume, reset, and switch modes. A long break is suggested
+  after every fourth focus session; sessions never start automatically.
+- **Tasks and goals:** choose a task to focus on, check off completed work, and
+  aim for 2, 4, or 6 focus sessions a day.
+- **Your companion:** adopt and name your cat, click to pet her, and watch her
+  stretch, drink, rest on the rug, or curl up for a nap.
+- **Food and rewards:** earn coins through focus, breaks, tasks, and daily pocket
+  money. Buy meals to restore hearts or add golden bonus hearts.
+- **The closet:** collect 24 domestic and wild coats. Counted feeding milestones
+  unlock 11 accessories and friendship medals. Wear a head and neck item together.
+- **Progress and memories:** open **Your progress** for lifetime totals and today's
+  sessions, **Cat journal** for your latest 40 moments, or **How to play** for
+  rules and advice for your cat's current state.
+- **Focus together:** invite one friend to a private room with a shared timer
+  and both cats in your workspace.
+- **Cozy details:** day/night themes, daily cat facts with sources, contextual
+  help, and a responsive layout.
 
-| Focus                    | Care                               | Collect                             |
-| ------------------------ | ---------------------------------- | ----------------------------------- |
-| 25-minute focus sessions | Feed your cat and restore hearts   | Buy and equip coat styles           |
-| 5-minute short breaks    | Fill the water bowl through breaks | Unlock care accessories and medals  |
-| 15-minute long breaks    | Claim daily pocket money           | Keep a journal of little milestones |
+Food and outfit changes unlock while paused or on a break. Time away never
+makes your cat lose hearts.
 
-Also included: tasks with earned rewards, daily focus goals, session history,
-daily cat facts with sources, and day/night themes.
+## Run locally
 
-The companion uses pixel artwork with random actions, click-to-pet reactions,
-and coat-specific poses. Artwork is stored as lossless WebP; the shop and equipped
-cat share the same sprite atlases. See [artwork notes](public/art/README.md).
-
-## Get started
-
-Use **Node 26.13.0** (see `.node-version`) and **pnpm 12.16.1**.
+Use **Node 26.13.0** (`.node-version`) and **pnpm 12.16.1** (`packageManager`).
 
 ```sh
 pnpm install
 pnpm dev
 ```
 
-Open the local URL printed by the development server. Adopt your cat, choose a
-task if you like, and start a focus session.
+Open the URL printed by the development server and adopt your cat. The Cloudflare
+Vite plugin runs the Worker and Durable Object locally.
 
-| Command               | What it does                                                                              |
-| --------------------- | ----------------------------------------------------------------------------------------- |
-| `pnpm dev`            | Starts the development server                                                             |
-| `pnpm test`           | Runs game rules, save migrations, behavior timing, and coat-art coverage tests            |
-| `pnpm build`          | Builds the browser app and Cloudflare Worker                                              |
-| `pnpm preview`        | Previews the production build locally                                                     |
-| `pnpm check`          | Audits dependencies, generates Worker types, and checks/fixes formatting, lint, and types |
-| `pnpm generate-types` | Regenerates Cloudflare Worker types                                                       |
-| `pnpm run deploy`     | Deploys using your configured Cloudflare account                                          |
+| Command | Purpose |
+| --- | --- |
+| `pnpm dev` | Start the development server |
+| `pnpm test` | Test game rules, saves, behavior/artwork, and room timer logic |
+| `pnpm build` | Build the client and Cloudflare Worker |
+| `pnpm preview` | Preview the production build locally |
+| `pnpm generate-types` | Generate Cloudflare Worker binding types |
+| `pnpm check` | Audit dependencies, generate types, and check/fix formatting, lint, and types |
+| `pnpm run deploy --dry-run` | Build and validate deployment without uploading |
+| `pnpm run deploy` | Build and deploy to Cloudflare |
 
-## How the app works
+## Focus with a friend
 
-### From request to dashboard
+1. Open **Focus together** and choose **Create an invite**.
+2. Copy the private link and share it with one friend.
+3. Your friend opens the link or pastes it into **Have an invite?**.
+4. The host starts, pauses, resets, and selects the shared timer mode.
 
-1. **Worker:** `src/fetch.ts` receives requests through Hono, applies locale
-   middleware, and delegates rendering to Solid.
-2. **Routing:** `src/App.tsx` loads file-based routes and provides translations
-   and a loading boundary.
-3. **Document:** `src/Document.tsx` defines the HTML shell, fonts, and hydration.
-4. **Dashboard:** the localized home route assembles the timer and companion
-   panels, then connects user actions to `useKitty()`.
-5. **State:** `useKitty.ts` restores the save, updates reactive state, and persists
-   successful actions. `game.ts` owns the rules and validates saves with Zod.
+Rooms last **24 hours** and hold **two people**. Reloading the same tab restores
+membership, and temporary disconnections reconnect automatically. Leaving
+transfers control to the remaining friend and resets your own timer for solo
+focus. Join before a session starts to qualify for your own session rewards.
 
-### A timer that survives interruptions
+The room shares timer state, presence, cat names, and outfits. Tasks, coins,
+health, and personal progress stay in each browser. Keep invite links private.
 
-The timer stores an absolute deadline. It recalculates remaining time on reload
-and when the tab becomes visible, rather than relying on a perfectly regular
-one-second interval. Pause preserves remaining time. Reset and manual mode
-switching are available; sessions never automatically repeat.
+Multiplayer uses WebSockets and a SQLite-backed Cloudflare Durable Object;
+static-only hosting cannot run it.
 
-Completing a session settles its rewards once. The app suggests a break after
-focus, with a long break after every fourth focus session.
+## Rewards and care
 
-### Focus with a friend
+| Action | Result |
+| --- | --- |
+| Finish a focus session | 6 coins, 1 care point, and a task reward credit within the daily allowance |
+| Complete a new task with a credit available | 1 coin, up to 3 task coins per local day |
+| Finish a rewarded short / long break | 1 / 2 water marks and 1 coin per new mark |
+| Fill the eight-mark water bowl | 4 extra coins |
+| Claim daily pocket money | 1–3 coins, with no streak requirement |
+| Feed your cat with a care point available | Restore hearts and advance counted-feed milestones |
 
-Open **Focus together** on the left of the dashboard to create or join a private
-invite. Rooms hold two people, expire after 24 hours, and use WebSockets backed
-by the `FocusRoom` Cloudflare Durable Object configured in `cloudflare.config.ts`.
-The host controls the shared timer; leaving transfers control to the friend.
-Reloading the same tab restores membership. Each browser keeps its own progress;
-join before a session starts to earn rewards. Only cat names and outfits are shared.
+The first **5 short breaks** and **3 long breaks** each day qualify for water
+rewards. The bowl, daily allowances, daily progress, and session history reset
+at local midnight. More breaks remain available after the reward allowance.
 
-With `pnpm dev` running, `node scripts/check-focus-room.mjs` checks two real
-WebSocket clients, room limits, reconnects and host transfer. Set `FOCUS_ROOM_URL`
-to test a different local port. Deploying requires the configured Durable Object
-binding and SQLite namespace; a static-only host cannot run multiplayer.
+Every two completed focus sessions use half a heart; golden hearts are used
+first. Meals restore hearts without care points, but do not advance feeding
+milestones. At zero hearts, a free rescue meal brings your cat back. Owned coats
+and accessories remain yours.
 
-### Rewards and care
+Add up to 10 tasks a day. Each task pays at most once; completing it before a
+reward credit is available does not earn a coin later. Focus sessions may also
+include a surprise coin gift. Your first name change is free; the next two cost
+5 and 10 coins.
 
-- **Focus:** each completed session earns 6 coins, one care credit, and a task
-  reward credit. A session may also include a one-time surprise coin gift.
-- **Tasks:** after earning a credit through focus, check off a new task for
-  1 coin, up to 3 task coins per local day. Each task can pay only once.
-- **Breaks:** short/long breaks add 1/2 water marks and one coin per added mark.
-  Filling the eight-mark bowl adds 4 coins. Up to 5 short and 3 long completed
-  breaks per day qualify; timers remain usable afterward.
-- **Health:** every two unprotected focus sessions cost half a heart. Bonus
-  hearts absorb damage first. Time away causes no damage.
-- **Food:** meals restore health; special food can add permanent bonus hearts.
-  Useful feeding spends care credits toward lifetime medals and accessories.
-- **Protection:** a packed lunch costs 4 coins and protects 4 focus sessions.
-- **Daily gift:** claim 1–3 coins once per local day, without a streak requirement.
-- **Recovery:** if the cat hides at zero health, a free recovery meal restores
-  one heart. Owned cosmetics remain yours.
-- **Customization:** buy coats and equip unlocked accessories while paused or
-  on a break. The three name changes cost 0, 5, and 10 coins.
+See [game.ts](src/kitty/game.ts) for exact prices, limits, and save rules.
 
-The implementation in `src/kitty/game.ts` is the source of truth for prices,
-limits, catalogs, and migrations.
+## Saves and privacy
 
-## Project map
+Personal progress saves automatically in this browser's `localStorage` under
+`pomodoro-kitty-v1`; the theme uses `kitty-theme`. Supported older saves are
+migrated and validated with Zod. Storage failures appear in the interface.
 
-```text
-src/
-  components/app/           Header, footer, branding, theme toggle
-  i18n/en.json              English translations
-  kitty/
-    game.ts                Rules, saved-state schema, migrations
-    game.test.mjs          Regression tests for rules and persistence
-    useKitty.ts            Reactive state, storage, timer lifecycle, tab lock
-    coats.ts               Coat catalog, prices, and color swatches
-    facts.ts               Daily facts and source links
-    Cat.tsx / CatSprite.tsx Companion animation and equipped artwork
-    CoatArt.tsx / Preview.tsx Shared coat and item previews
-    Tasks.tsx              Task creation, selection, completion, rewards
-    Shop.tsx               Coat and accessory selection
-    PurchaseDialog.tsx     Purchase review and confirmation
-    ProgressSidebar.tsx    Progress, history, and journal
-    …                      Care, guide, loading, and supporting components
-  routes/[locale]/
-    (app).tsx              Shared page layout
-    (app)/index.tsx        Main timer and companion dashboard
-    (app)/[...404].tsx     Localized not-found page
-  App.tsx                  Router
-  Document.tsx             HTML shell and hydration
-  fetch.ts                 Worker entry point
-  styles/
-    kitty.css              Shared foundations, controls and responsive styles
-    dashboard.css          Dashboard layout and theme rules
-    playful.css            Final visual refinements and animation styles
-docs/                      Design and economy audit notes
-uno.config.ts              UnoCSS presets, theme, reusable shortcuts
-vite.config.ts             Development/build plugins and SSR routing
-cloudflare.config.ts       Worker and static asset configuration
+There are no user accounts or cloud saves. Clearing browser data removes local
+progress, and other browsers or devices have separate saves. Focus room
+membership uses `sessionStorage` to reconnect from the same tab.
+
+Where Web Locks are supported, a second tab is read-only to prevent duplicate
+purchases and rewards. The timer uses an absolute deadline and reconciles on
+reload or return to the tab, avoiding accumulated background countdown drift.
+
+## Deploy to Cloudflare
+
+The project uses the installed **`cf` CLI** and
+[cloudflare.config.ts](cloudflare.config.ts). The Worker is named
+`pomodoro-kitty`, with `ASSETS` and `FOCUS_ROOMS` bindings. Build output is written
+to `.cloudflare/output/v0/`.
+
+With your Cloudflare account configured:
+
+```sh
+pnpm run deploy --dry-run
+pnpm run deploy
 ```
 
-### Styling
+For **Cloudflare Workers Builds**, use these dashboard settings:
 
-`Document.tsx` imports shared styles once, alongside UnoCSS utilities.
-`kitty.css` contains the former ordered preflights; keeping them outside the
-UnoCSS chunk generator avoids repeating the full stylesheet in every route.
-`dashboard.css` and `playful.css` follow with layout, theme and visual refinements.
-Preserve this order when changing styles. Coat previews use the same artwork
-as the equipped cat rather than generated swatch rules.
+| Setting | Value |
+| --- | --- |
+| Build command | Leave empty; the deploy command builds first |
+| Deploy command | `pnpm run deploy` |
 
-### Localization
-
-English is the default locale. Rimelight i18n provides locale-prefixed routes;
-requests without a locale redirect to a localized URL. Add translation JSON
-files under `src/i18n/` to introduce another language. Some interface copy is
-still written directly in components.
-
-### Storage and multiple tabs
-
-Progress is saved under `pomodoro-kitty-v1` in this browser's `localStorage`.
-The theme uses `kitty-theme`. Existing save migrations preserve supported older
-progress, including the transition from two companions to one cat.
-
-When Web Locks are supported, only one tab can change game state at a time;
-secondary tabs are read-only. Storage failures are surfaced in the interface.
-
-**There is no cloud sync or account backend.** Clearing browser data removes
-progress. Different browsers and devices have separate saves.
-
-## Deployment
-
-`pnpm build` produces the client and Worker bundles. With your Cloudflare
-account configured, run `pnpm run deploy`. Worker settings live in
-`cloudflare.config.ts`; the Worker is named `pomodoro-kitty`.
-
-For Cloudflare Workers Builds, leave the build command empty and set the deploy
-command to `pnpm run deploy`. The deploy command builds before uploading. Replace the
-dashboard default `npx wrangler deploy`: Wrangler does not read this project's
+Replace the default `npx wrangler deploy`. Wrangler does not read this project's
 `cloudflare.config.ts` and attempts unsupported Hono autoconfiguration instead.
+Use `pnpm run deploy` explicitly: `pnpm deploy` is also a built-in pnpm command.
 
-To validate deployment locally without uploading, run `pnpm run deploy --dry-run`.
+For CI authentication, configure `CLOUDFLARE_API_TOKEN` and
+`CLOUDFLARE_ACCOUNT_ID` in the build environment. Do not commit credentials.
+
+## Development map
+
+| Location | Responsibility |
+| --- | --- |
+| `src/fetch.ts` | Hono requests, room API, locale middleware, Solid SSR |
+| `src/App.tsx`, `src/Document.tsx` | Routing, translations, document shell, hydration, shared styles |
+| `src/routes/[locale]/(app)/index.tsx` | Main timer and companion workspace |
+| `src/kitty/game.ts`, `useKitty.ts` | Rules, save validation/migrations, persistence, timer lifecycle, tab lock |
+| `src/kitty/FocusRoom.ts`, `room.ts`, `useFocusRoom.ts` | Durable Object, shared timer protocol, browser connection |
+| `src/kitty/Friends.tsx`, `FriendsDock.tsx` | Invites and room interface |
+| `src/kitty/Shop.tsx`, `coats.ts`, `accessories.ts` | Closet, coat catalog, accessory unlocks |
+| `src/kitty/AnimatedCat.tsx`, `CatSprite.tsx`, `behaviors.ts` | Companion artwork, poses, and behavior |
+| `src/kitty/DashboardHelp.tsx`, `ProgressSidebar.tsx`, `CatJournal.tsx` | Progress, guide, history, journal dialogs |
+| `src/styles/` | Shared foundations, dashboard layout, themes, visual refinements |
+| `src/i18n/` | Translation JSON; English is the default locale |
+| `public/art/` | Lossless WebP room, cat, coat, pose, and inventory artwork |
+| `scripts/check-focus-room.mjs` | Integration check with real WebSocket clients |
+| `vite.config.ts`, `uno.config.ts` | Build plugins, file routes, utilities, theme configuration |
+
+The app uses Solid 2 prerelease APIs. Shared styles load from `Document.tsx` in
+the order `kitty.css`, `dashboard.css`, then `playful.css`; preserve that order.
+Locale-prefixed routes use Rimelight i18n, though some interface copy remains
+inline in components.
+
+Shop previews and the equipped cat reuse each coat's sitting artwork, with
+separate pose sheets and an inventory atlas for items. See
+[artwork notes](public/art/README.md) for asset origins and layout details.
+
+### Check multiplayer locally
+
+With `pnpm dev` running:
+
+```sh
+node scripts/check-focus-room.mjs
+```
+
+The check covers origin protection, invites, the two-person limit, profiles,
+host-only controls, shared deadlines, pause, reconnect, and host transfer. It
+defaults to `http://127.0.0.1:5173`; set `FOCUS_ROOM_URL` for another origin.
 
 ---
 
