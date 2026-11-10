@@ -1,3 +1,29 @@
+import type { CatBehavior } from "./behaviors";
+import { poseSizes } from "./poseSizes.ts";
+
+export function coatFrame(coat: number, pose: CatBehavior = "idle") {
+  const index = Number.isFinite(coat)
+    ? Math.max(0, Math.min(coatCatalog.length - 1, Math.trunc(coat)))
+    : 0;
+  const posed = ["rest", "stretch", "drink", "bed"].includes(pose);
+  if (!posed)
+    return {
+      src: index === 0 ? "/art/companion.webp" : `/art/coats/${index}-sitting.webp`,
+      viewBox: "250 200 810 810",
+      width: 1296,
+      height: 1213,
+    };
+  const column = pose === "stretch" || pose === "bed" ? 1 : 0;
+  const row = pose === "drink" || pose === "bed" ? 1 : 0;
+  const [width, height] = poseSizes[index]!;
+  return {
+    src: `/art/coats/${index}-poses.webp`,
+    viewBox: `${(column * width) / 2} ${(row * height) / 2} ${width / 2} ${height / 2}`,
+    width,
+    height,
+  };
+}
+
 // Catalog v2: twelve domestic coats and twelve wild-inspired end-game coats.
 export const coatCatalog = [
   {

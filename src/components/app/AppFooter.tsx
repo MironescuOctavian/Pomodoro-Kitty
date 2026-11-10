@@ -1,27 +1,24 @@
 import { t } from "@rimelight/i18n";
-import Brand from "./Brand";
 
 export default function AppFooter() {
   return (
     <footer class="app-footer">
       <div class="shell-container">
         <div class="footer-main">
-          <div class="footer-about">
-            <Brand />
-            <div class="footer-credit">
-              <span>
-                {t("shell.created")} <a href="https://octavianmironescu.com">Octavian Mironescu</a>
-              </span>
-              <span>© {new Date().getFullYear()} Pomodoro Kitty</span>
-            </div>
+          <div class="footer-brand-card">
+            <a class="app-brand" href="/">
+              Pomodoro Kitty<span>.</span>
+            </a>
+            <p>
+              Made with care by <a href="https://octavianmironescu.com">Mironescu Octavian</a>.
+            </p>
           </div>
-          <div class="footer-privacy">
-            <h2>{t("shell.your-space")}</h2>
-            <p>{t("shell.local")}</p>
-            <span>{t("ui.no-pressure")}</span>
+          <div class="footer-info-card">
+            <strong>Your little space, saved here.</strong>
+            <p>Progress stays in this browser. No account needed.</p>
+            <span>No streaks. No rush.</span>
           </div>
           <nav class="footer-links" aria-label={t("shell.links")}>
-            <h2>{t("shell.explore")}</h2>
             <a href="https://octavianmironescu.com">
               {t("shell.portfolio")} <span aria-hidden="true">↗</span>
             </a>

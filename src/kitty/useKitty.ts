@@ -1,5 +1,6 @@
 import { createSignal, onSettled } from "solid-js";
 import { initial, newDay, readSave, settle, welcomeJournal, type Game } from "./game";
+import { syncRoomTimer, type RoomTimer } from "./room";
 
 const key = "pomodoro-kitty-v1";
 export function useKitty() {
@@ -93,5 +94,12 @@ export function useKitty() {
       document.removeEventListener("visibilitychange", visibility);
     };
   });
-  return { game, ready, remaining, storageError, busy, earned, act };
+  const syncRoom = (timer: RoomTimer, serverNow: number) => {
+    if (!ready() || busy()) return;
+    tick();
+    syncRoomTimer(current, timer, serverNow, Date.now());
+    tick();
+    publish(true);
+  };
+  return { game, ready, remaining, storageError, busy, earned, act, syncRoom };
 }

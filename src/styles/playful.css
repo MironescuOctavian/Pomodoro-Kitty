@@ -1,0 +1,874 @@
+/* Final interaction polish uses the app's stable ID instead of escalating legacy selectors. */
+#kitty-app {
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='230' viewBox='0 0 250 230'%3E%3Cg fill='%23dca644' opacity='.13'%3E%3Cg transform='translate(25 22) rotate(-20)'%3E%3Cellipse cx='14' cy='20' rx='10' ry='8'/%3E%3Cellipse cx='0' cy='7' rx='3.5' ry='5'/%3E%3Cellipse cx='10' cy='1' rx='3.5' ry='5'/%3E%3Cellipse cx='20' cy='2' rx='3.5' ry='5'/%3E%3Cellipse cx='28' cy='9' rx='3.5' ry='5'/%3E%3C/g%3E%3Cg transform='translate(157 142) rotate(18)'%3E%3Cellipse cx='14' cy='20' rx='10' ry='8'/%3E%3Cellipse cx='0' cy='7' rx='3.5' ry='5'/%3E%3Cellipse cx='10' cy='1' rx='3.5' ry='5'/%3E%3Cellipse cx='20' cy='2' rx='3.5' ry='5'/%3E%3Cellipse cx='28' cy='9' rx='3.5' ry='5'/%3E%3C/g%3E%3C/g%3E%3Cg fill='none' stroke='%23d6a041' stroke-width='2.4' opacity='.13' stroke-linejoin='round'%3E%3Cpath d='m162 24 9 9 18 0 9-9 3 30c-3 16-39 16-42 0z'/%3E%3Cpath d='M170 49h4m12 0h4m-12 7 3 3 3-3'/%3E%3Ccircle cx='56' cy='160' r='17'/%3E%3Cpath d='M42 150c20-3 31 17 7 25m1-30c-5 18 25 15 20 29m-10 3c10 17 25 0 31 8'/%3E%3Cpath d='M116 90h25l-4 11h-17zm3-6h19m-63-4 12 0 3 4-3 4H75l-3-4z'/%3E%3C/g%3E%3C/svg%3E"),
+    radial-gradient(ellipse at top, var(--page-glow-start), var(--page-glow-end));
+  background-size:
+    250px 230px,
+    auto;
+}
+#kitty-app .help-window-close {
+  display: grid;
+  place-items: center;
+  padding: 0;
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  min-height: 34px;
+  line-height: 1;
+  margin: 0;
+  align-self: center;
+}
+#kitty-app .help-window-close svg {
+  display: block;
+  width: 17px;
+  height: 17px;
+  pointer-events: none;
+}
+#kitty-app .help-window-header {
+  align-items: center;
+  min-height: 58px;
+}
+#kitty-app .help-window-header h2 {
+  line-height: 1.2;
+  margin: 0;
+}
+#kitty-app .rename-window {
+  inset: 78px auto auto 50%;
+  transform: translateX(-50%);
+  width: min(370px, calc(100% - 28px));
+}
+#kitty-app .rename-window .help-window-header h2 {
+  font-size: 20px;
+}
+#kitty-app .rename-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+#kitty-app .rename-form input {
+  width: 100%;
+  min-width: 0;
+  padding: 10px 12px;
+  height: 42px;
+  border: 1px solid var(--edge);
+  border-radius: 10px;
+  background: var(--input);
+  color: var(--ink);
+}
+#kitty-app .rename-form button {
+  white-space: nowrap;
+  min-height: 42px;
+  padding: 8px 12px;
+}
+#kitty-app .header-pocket-money {
+  grid-template-columns: 30px minmax(0, 1fr) 74px;
+  width: 100%;
+}
+#kitty-app .header-pocket-money .claim-button {
+  width: 74px;
+  min-width: 74px;
+  min-height: 38px;
+  margin: 0;
+  padding: 7px;
+  white-space: nowrap;
+}
+#kitty-app .companion-topline {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  min-height: 48px;
+  gap: 9px;
+}
+#kitty-app .companion-heading {
+  grid-column: 1;
+  justify-self: start;
+  width: 100%;
+  min-width: 0;
+}
+#kitty-app .companion-topline .cat-condition {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: center;
+  gap: 12px;
+}
+#kitty-app .companion-topline .companion-coins {
+  grid-column: 3;
+  grid-row: 1;
+  justify-self: end;
+  max-width: 100%;
+}
+#kitty-app .cat-name {
+  width: 100%;
+  min-width: 0;
+}
+#kitty-app .cat-name h2 {
+  min-width: 0;
+  font-size: 25px;
+}
+#kitty-app .rename-button {
+  flex: none;
+}
+#kitty-app .shop-categories {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--edge);
+  border-radius: 12px;
+  background: var(--panel);
+}
+#kitty-app .shop-categories .shop-category {
+  border: 1px solid transparent;
+  border-radius: 9px;
+  min-height: 34px;
+  padding: 7px 13px;
+  background: transparent;
+  box-shadow: none;
+  color: var(--soft-ink);
+}
+#kitty-app .shop-categories .shop-category[aria-pressed="true"] {
+  background: linear-gradient(#ffcf62, #eca217);
+  border-color: #bc811c;
+  color: #513306;
+  box-shadow:
+    inset 0 1px #ffeeb7,
+    0 2px #ad7b29;
+}
+#kitty-app .shop-categories .shop-category:not([aria-pressed="true"]):hover {
+  background: var(--control);
+  color: var(--control-ink);
+}
+/* The illustration and caption now share a snug, intrinsic-height wrapper. */
+#kitty-app .companion-upper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  margin: 4px 0 10px;
+}
+#kitty-app .companion-room {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+  width: 100%;
+}
+#kitty-app .cat-scene {
+  flex: none;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1410 / 887;
+}
+#kitty-app .room-art {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+#kitty-app .companion-room .cat-status {
+  flex: none;
+  margin: 5px 0 0;
+  padding: 0;
+  min-height: 18px;
+  font-size: 12px;
+  line-height: 1.4;
+}
+#kitty-app .footer-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr) auto;
+  gap: 14px;
+  align-items: stretch;
+  margin-top: 0;
+  padding: 13px 0 16px;
+  border-top: 1px solid var(--edge);
+}
+#kitty-app .footer-brand-card,
+#kitty-app .footer-info-card,
+#kitty-app .footer-links {
+  border: 1px solid var(--edge);
+  border-radius: 15px;
+  background: color-mix(in srgb, var(--panel) 88%, transparent);
+  padding: 12px 16px;
+  min-width: 0;
+}
+#kitty-app .footer-brand-card .app-brand {
+  font-size: 23px;
+  gap: 10px;
+}
+#kitty-app .footer-brand-card .brand-cat {
+  width: 33px;
+  height: 33px;
+}
+#kitty-app .footer-brand-card p {
+  margin: 7px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--soft-ink);
+}
+#kitty-app .footer-brand-card p a {
+  color: inherit;
+  text-decoration-color: var(--edge);
+  text-underline-offset: 3px;
+}
+#kitty-app .footer-info-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+#kitty-app .footer-info-card strong {
+  font: 500 17px/1.3 var(--display);
+  color: var(--heading);
+}
+#kitty-app .footer-info-card p {
+  margin: 5px 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+#kitty-app .footer-info-card span {
+  font-size: 11px;
+  color: var(--soft-ink);
+}
+#kitty-app .footer-links {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  gap: 7px;
+}
+#kitty-app .footer-links a {
+  font: 500 15px/1.4 var(--display);
+  color: var(--control-ink);
+  text-decoration: none;
+  padding: 8px 13px;
+  background: var(--control);
+  border: 1px solid var(--edge);
+  border-radius: 9px;
+  white-space: nowrap;
+}
+#kitty-app .footer-links a:hover {
+  background: var(--control-highlight);
+}
+@media (min-width: 1000px) and (min-height: 700px) {
+  #kitty-app .workspace {
+    padding-bottom: 10px;
+  }
+  #kitty-app .app-footer {
+    flex: none;
+  }
+  #kitty-app .companion-upper {
+    flex: 1;
+    min-height: 125px;
+  }
+  #kitty-app .companion-room {
+    max-height: 100%;
+  }
+  #kitty-app .cat-scene {
+    width: min(100%, calc(31dvh * 1410 / 887));
+    max-height: 31dvh;
+  }
+  #kitty-app .companion-controls {
+    flex: 1;
+    min-height: 180px;
+  }
+  #kitty-app .focus-desk {
+    grid-template-rows: minmax(0, 1fr) minmax(0, 0.5fr) 86px;
+  }
+  #kitty-app .timer-sheet {
+    gap: 4px;
+  }
+  #kitty-app .timer-sheet > * {
+    margin-block: 0;
+    flex: none;
+  }
+  #kitty-app .desk-subtitle {
+    display: none;
+  }
+  #kitty-app .focus-eyebrow,
+  #kitty-app .timer-reward,
+  #kitty-app .current-task-caption {
+    display: none;
+  }
+  #kitty-app .desk-title {
+    font-size: 26px;
+    line-height: 1.1;
+  }
+  #kitty-app .focus-clock {
+    font-size: clamp(62px, 9dvh, 100px);
+    line-height: 1;
+  }
+  #kitty-app .mode-switch button {
+    padding: 5px 0;
+    line-height: 1.2;
+  }
+  #kitty-app .timer-progress {
+    margin: 3px auto;
+    height: 6px;
+  }
+  #kitty-app .session-caption {
+    font-size: 11px;
+    line-height: 1.3;
+  }
+  #kitty-app .timer-actions .start-button {
+    min-height: 36px;
+    padding: 8px 19px;
+    font-size: 18px;
+    line-height: 1.1;
+  }
+  #kitty-app .timer-actions .reset-button {
+    padding: 8px 12px;
+    font-size: 14px;
+    line-height: 1.1;
+  }
+}
+@media (min-width: 1000px) and (min-height: 700px) and (max-height: 820px) {
+  #kitty-app .header-inner {
+    min-height: 53px;
+  }
+  #kitty-app .daily-fact {
+    min-height: 55px;
+  }
+  #kitty-app .footer-main {
+    padding: 9px 0 10px;
+    gap: 10px;
+  }
+  #kitty-app .footer-brand-card,
+  #kitty-app .footer-info-card,
+  #kitty-app .footer-links {
+    padding: 8px 12px;
+    border-radius: 12px;
+  }
+  #kitty-app .footer-brand-card .app-brand {
+    font-size: 20px;
+  }
+  #kitty-app .footer-brand-card p {
+    font-size: 11px;
+    margin-top: 4px;
+  }
+  #kitty-app .footer-info-card strong {
+    font-size: 15px;
+  }
+  #kitty-app .footer-info-card p {
+    font-size: 11px;
+    margin: 3px 0;
+  }
+  #kitty-app .footer-info-card span {
+    font-size: 10px;
+  }
+  #kitty-app .focus-desk {
+    grid-template-rows: minmax(0, 1fr) 125px 65px;
+    gap: 7px;
+  }
+  #kitty-app .timer-sheet {
+    padding: 8px 12px;
+    gap: 3px;
+  }
+  #kitty-app .desk-title {
+    font-size: 22px;
+  }
+  #kitty-app .focus-clock {
+    font-size: 58px;
+  }
+  #kitty-app .mode-switch button {
+    font-size: 13px;
+    padding: 4px 0;
+  }
+  #kitty-app .timer-actions .start-button {
+    padding: 7px 16px;
+    font-size: 17px;
+    min-height: 33px;
+  }
+  #kitty-app .timer-actions .reset-button {
+    padding: 7px 12px;
+  }
+  #kitty-app .companion-controls {
+    min-height: 175px;
+  }
+  #kitty-app .companion-upper {
+    min-height: 105px;
+  }
+  #kitty-app .companion-topline {
+    min-height: 40px;
+  }
+  #kitty-app .cat-name h2 {
+    font-size: 22px;
+  }
+}
+@media (max-width: 900px) {
+  #kitty-app .footer-main {
+    grid-template-columns: 1fr 1fr;
+  }
+  #kitty-app .footer-links {
+    grid-column: 1 / -1;
+    flex-direction: row;
+  }
+}
+@media (max-width: 600px) {
+  #kitty-app .footer-main {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  #kitty-app .footer-links {
+    grid-column: 1;
+  }
+  #kitty-app .footer-info-card {
+    text-align: left;
+  }
+  #kitty-app .companion-topline {
+    gap: 5px;
+  }
+  #kitty-app .cat-name h2 {
+    font-size: 20px;
+  }
+  #kitty-app .companion-topline .cat-condition {
+    gap: 6px;
+  }
+  #kitty-app .companion-topline .companion-coins {
+    font-size: 10px;
+  }
+  #kitty-app .rename-window {
+    inset: 90px auto auto 50%;
+  }
+}
+/* Motion is deliberately short and quiet. No perpetual idle animation. */
+#kitty-app .cat-sprite {
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+}
+#kitty-app .room-cat {
+  overflow: visible;
+}
+#kitty-app .cat-sprite[data-pose="ears"] .cat-ear-left {
+  transform-origin: 400px 335px;
+  animation: ear-left 1.8s steps(4, end) 1;
+}
+#kitty-app .cat-sprite[data-pose="ears"] .cat-ear-accessory {
+  transform-origin: 150px 135px;
+  animation: ear-left 1.8s steps(4, end) 1;
+}
+#kitty-app .cat-sprite[data-pose="ears"] .cat-ear-right {
+  transform-origin: 715px 335px;
+  animation: ear-right 1.8s steps(4, end) 1;
+}
+#kitty-app .cat-sprite:is([data-pose="tail"], [data-pose="pet"]) .cat-tail {
+  transform-origin: 920px 925px;
+  animation: tail-swish 0.65s steps(5, end) 3;
+}
+#kitty-app .cat-sprite[data-pose="stretch"] {
+  transform-origin: 50% 100%;
+  animation: cat-stretch 3.5s ease-in-out 1;
+}
+#kitty-app .cat-sprite:is([data-pose="rest"], [data-pose="bed"]) {
+  transform-origin: 50% 100%;
+  animation: sleepy-breath 3s ease-in-out infinite;
+}
+#kitty-app .cat-sprite[data-pose="drink"] {
+  transform-origin: 60% 100%;
+  animation: cat-lap 0.65s steps(2, end) 7;
+}
+#kitty-app .cat-mouth {
+  animation: mouth-meow 0.6s steps(2, end) 2;
+  transform-origin: 540px 535px;
+}
+#kitty-app .cat-mew {
+  font-family: var(--display);
+  animation: mew-rise 1.8s ease-out 1 both;
+}
+#kitty-app .cat-blush {
+  animation: blush-in 2.4s ease-in-out 1 both;
+}
+#kitty-app .pet-heart {
+  pointer-events: none;
+  animation: pet-heart-rise 1.8s ease-out 1 both;
+}
+#kitty-app .pet-heart-1 {
+  animation-delay: 0.12s;
+}
+#kitty-app .pet-heart-2 {
+  animation-delay: 0.22s;
+}
+#kitty-app .pet-heart-3 {
+  animation-delay: 0.08s;
+}
+#kitty-app .pet-heart-4 {
+  animation-delay: 0.3s;
+}
+#kitty-app .cat-pet-target {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  z-index: 2;
+}
+#kitty-app .cat-pet-target:hover {
+  outline: none;
+}
+#kitty-app .cat-pet-target:focus-visible {
+  outline: 2px dashed var(--edge-strong);
+  outline-offset: 2px;
+}
+@keyframes ear-left {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  25%,
+  65% {
+    transform: rotate(-5deg);
+  }
+  45%,
+  80% {
+    transform: rotate(3deg);
+  }
+}
+@keyframes ear-right {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  30%,
+  70% {
+    transform: rotate(5deg);
+  }
+  50%,
+  85% {
+    transform: rotate(-3deg);
+  }
+}
+@keyframes tail-swish {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  30% {
+    transform: rotate(-5deg);
+  }
+  70% {
+    transform: rotate(4deg);
+  }
+}
+@keyframes cat-stretch {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  45%,
+  70% {
+    transform: scale(1.045, 0.975);
+  }
+}
+@keyframes sleepy-breath {
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(0.985);
+  }
+}
+@keyframes cat-lap {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(5px);
+  }
+}
+@keyframes mouth-meow {
+  0%,
+  100% {
+    transform: scaleY(0.3);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+@keyframes mew-rise {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  20%,
+  70% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-35px);
+  }
+}
+@keyframes blush-in {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  20%,
+  80% {
+    opacity: 0.8;
+  }
+}
+@keyframes pet-heart-rise {
+  0% {
+    opacity: 0;
+    transform: translateY(25px) scale(0.65);
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-130px) scale(1.1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #kitty-app .cat-sprite *,
+  #kitty-app .cat-sprite,
+  #kitty-app .room-cat {
+    animation: none !important;
+    transition: none !important;
+  }
+  #kitty-app .pet-heart {
+    display: none;
+  }
+  #kitty-app .cat-blush {
+    animation: none;
+    opacity: 0.8;
+  }
+}
+
+/* One quiet footer surface, with the same geometry before and after interaction. */
+#kitty-app .footer-main {
+  border: 1px solid var(--edge);
+  border-radius: 15px;
+  background: color-mix(in srgb, var(--panel) 92%, transparent);
+  padding: 0;
+  margin: 9px 0 10px;
+  gap: 0;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr) minmax(0, 1fr);
+}
+#kitty-app .footer-links {
+  align-items: flex-end;
+}
+#kitty-app :is(.menu-list, .task-list, .help-window-content, .journal-list, .menu-help-copy) {
+  scrollbar-width: thin;
+  scrollbar-color: var(--heading) var(--panel);
+}
+#kitty-app *::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+#kitty-app *::-webkit-scrollbar-track {
+  background: var(--panel);
+  border-radius: 8px;
+}
+#kitty-app *::-webkit-scrollbar-thumb {
+  background: var(--heading);
+  border: 2px solid var(--panel);
+  border-radius: 8px;
+}
+#kitty-app *::-webkit-scrollbar-thumb:hover {
+  background: var(--soft-ink);
+}
+@media (max-width: 900px) {
+  #kitty-app .footer-main {
+    grid-template-columns: 1fr 1fr;
+  }
+  #kitty-app .footer-links {
+    align-items: center;
+  }
+}
+@media (max-width: 600px) {
+  #kitty-app .footer-main {
+    grid-template-columns: 1fr;
+  }
+}
+#kitty-app .footer-brand-card,
+#kitty-app .footer-info-card,
+#kitty-app .footer-links {
+  border: 0;
+  background: transparent;
+  border-radius: 0;
+}
+#kitty-app .footer-brand-card .app-brand {
+  display: inline-flex;
+  gap: 0;
+  color: var(--heading);
+  font-family: var(--display);
+  text-decoration: none;
+}
+
+/* Selected tasks must use the theme's paired surface and text colors. */
+#kitty-app .task-item.current-task {
+  background: var(--control);
+  color: var(--control-ink);
+  box-shadow: inset 3px 0 var(--edge);
+}
+#kitty-app .task-item.current-task label,
+#kitty-app .task-item.current-task label span {
+  color: var(--control-ink);
+}
+#kitty-app .task-item.current-task .task-select {
+  background: var(--panel);
+  color: var(--ink);
+  border-color: var(--edge);
+}
+#kitty-app .task-item.current-task .task-delete {
+  color: var(--control-ink);
+}
+
+/* Shared editorial treatment for companion help, without changing timer copy. */
+#kitty-app .help-window-content,
+#kitty-app .menu-help-copy,
+#kitty-app .guide-content {
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.65;
+}
+#kitty-app .help-window :is(h2, h3, summary),
+#kitty-app .menu-help-copy strong,
+#kitty-app .guide-content strong {
+  color: var(--heading);
+}
+#kitty-app :is(.menu-help-copy, .guide-content) :is(ul, ol) {
+  padding-inline-start: 22px;
+  margin: 10px 0;
+  list-style-position: outside;
+}
+#kitty-app :is(.menu-help-copy, .guide-content) ul {
+  list-style-type: disc;
+}
+#kitty-app :is(.menu-help-copy, .guide-content) ol {
+  list-style-type: decimal;
+}
+#kitty-app :is(.menu-help-copy, .guide-content) li {
+  padding-left: 3px;
+  margin: 8px 0;
+  color: var(--ink);
+}
+#kitty-app :is(.menu-help-copy, .guide-content) li::marker {
+  color: var(--heading);
+  font-weight: 600;
+}
+#kitty-app .guide-content > details,
+#kitty-app .guide-welcome,
+#kitty-app .guide-now {
+  padding: 13px 15px;
+  border: 1px solid var(--edge);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--panel) 85%, var(--control));
+  margin: 10px 0;
+}
+#kitty-app .guide-welcome h3 {
+  margin: 0 0 7px;
+  font: 500 20px/1.3 var(--display);
+}
+#kitty-app .guide-content > details > summary {
+  font: 500 17px/1.4 var(--display);
+  cursor: pointer;
+}
+#kitty-app .guide-content p,
+#kitty-app .menu-help-copy p {
+  margin: 9px 0;
+  color: var(--ink);
+}
+#kitty-app .guide-footnote,
+#kitty-app .tracker-note,
+#kitty-app .journal-entry time {
+  color: var(--soft-ink);
+}
+#kitty-app .companion-help-shade {
+  background: rgb(50 32 12 / 46%);
+  backdrop-filter: blur(3px);
+}
+#kitty-app .timer-dim-overlay.active {
+  opacity: 0.78;
+}
+[data-theme="night"] #kitty-app .timer-dim-overlay.active {
+  opacity: 0.68;
+}
+[data-theme="night"] #kitty-app .companion-help-shade {
+  background: rgb(10 8 5 / 62%);
+}
+#kitty-app .companion-coins {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 7px 11px;
+  min-height: 36px;
+  line-height: 1.2;
+  white-space: nowrap;
+  color: var(--control-ink);
+}
+#kitty-app .companion-coins .art-preview {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  margin: 0;
+}
+#kitty-app .timer-action-icon {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  filter: drop-shadow(0 1px 0 rgb(100 55 0 / 15%));
+}
+#kitty-app .just-purchased .product-state {
+  color: var(--control-ink);
+  background: var(--control);
+  border: 1px solid var(--edge);
+  border-radius: 8px;
+  padding: 5px 8px;
+  text-align: center;
+  font-weight: 600;
+  line-height: 1.4;
+}
+#kitty-app .care-row .product-state {
+  justify-self: center;
+  text-align: center;
+}
+#kitty-app .food-list .care-row,
+#kitty-app .shop-items .closet-product {
+  grid-template-columns: 28px minmax(0, 1fr) minmax(65px, 0.7fr) auto;
+  column-gap: 8px;
+}
+#kitty-app .food-list .care-row > .care-label {
+  grid-column: 2;
+  grid-row: 1 / 3;
+}
+#kitty-app .food-list .care-row > .product-state,
+#kitty-app .shop-items .closet-product > .product-state {
+  grid-column: 3;
+  grid-row: 1 / 4;
+  justify-self: center;
+  align-self: center;
+  text-align: center;
+}
+#kitty-app .food-list .care-row > button,
+#kitty-app .shop-items .closet-product > button {
+  grid-column: 4;
+}
+#kitty-app .coat-portrait {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1;
+}
+#kitty-app .coat-portrait img {
+  position: absolute;
+  left: -30.8642%;
+  top: -24.6914%;
+  width: 160%;
+  max-width: none;
+  height: auto;
+  image-rendering: pixelated;
+}

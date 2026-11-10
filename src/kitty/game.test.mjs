@@ -42,6 +42,8 @@ test("older two-pet saves restore cat fields and preserve shared progress", () =
 });
 test("starting balance is five coins", () => {
   assert.equal(initial().coins, 5);
+  assert.equal(initial().health, 2);
+  assert.equal(initial().bonus, 0);
 });
 test("task coins require focus, cannot repeat, and cap at three daily", () => {
   const g = initial();
@@ -104,8 +106,9 @@ test("focus settles once, keeps elapsed time through pauses, and never farms off
   settle(g, 999999999);
   assert.equal(g.coins, 11);
 });
-test("hunger, protection and permanent bonus hearts", () => {
+test("hunger consumes bonus hearts before regular hearts", () => {
   const g = initial();
+  g.health = 6;
   g.adopted = true;
   session(g);
   assert.equal(g.health, 6);
@@ -116,11 +119,7 @@ test("hunger, protection and permanent bonus hearts", () => {
   session(g);
   assert.equal(g.bonus, 1);
   assert.equal(g.health, 5);
-  g.protection = 4;
   const health = g.health;
-  for (let i = 0; i < 4; i++) session(g);
-  assert.equal(g.protection, 0);
-  assert.equal(g.health, health);
   session(g);
   assert.equal(g.bonus, 1);
   session(g);
@@ -128,6 +127,15 @@ test("hunger, protection and permanent bonus hearts", () => {
   session(g);
   session(g);
   assert.equal(g.health, health - 1);
+});
+
+test("retired catnip protection is removed from saved games", () => {
+  const saved = { ...initial(), protection: 80, coins: 130, sessions: 25 };
+  const parsed = readSave(saved);
+  assert.ok(parsed.success);
+  assert.equal("protection" in parsed.data, false);
+  assert.equal(parsed.data.coins, 130);
+  assert.equal(parsed.data.sessions, 25);
 });
 
 test("retired cleaning data is discarded without losing saved progress", () => {
@@ -140,6 +148,7 @@ test("retired cleaning data is discarded without losing saved progress", () => {
 });
 test("food caps health and bonus, prevents waste, and gates medal progress", () => {
   const g = initial();
+  g.health = 6;
   g.adopted = true;
   g.coins = 100;
   assert.equal(feed(g, 0), false);
@@ -339,6 +348,7 @@ test("abandoned breaks do not consume reward slots; completed breaks count once"
 
 test("a four-session day can fund care and still save 32 coins", () => {
   const g = initial();
+  g.health = 6;
   g.adopted = true;
   claimDaily(g, Date.now(), () => 0.5);
   for (let i = 0; i < 4; i++) {
@@ -411,6 +421,7 @@ test("older saves recover lifetime totals only from available saved evidence", (
 
 test("journal records successful events and focus milestones only once", () => {
   const g = initial();
+  g.health = 6;
   g.adopted = true;
   assert.equal(feed(g, 0), false);
   assert.equal(g.journal.length, 0);

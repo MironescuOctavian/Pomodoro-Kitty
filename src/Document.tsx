@@ -1,7 +1,10 @@
 import type { ParentProps } from "solid-js";
 import { HydrationScript } from "@solidjs/web";
 import { getLocaleInfo } from "@rimelight/i18n";
+import "/src/styles/kitty.css";
 import "virtual:uno.css";
+import "/src/styles/dashboard.css";
+import "/src/styles/playful.css";
 
 export default function Document(props: ParentProps) {
   return (
@@ -17,12 +20,14 @@ export default function Document(props: ParentProps) {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
           rel="stylesheet"
         />
         <HydrationScript />
       </head>
-      <body class="cozy-theme m-0 min-h-svh min-w-80">{props.children}</body>
+      <body id="kitty-app" class="cozy-theme m-0 min-h-svh min-w-80">
+        {props.children}
+      </body>
     </html>
   );
 }

@@ -18,7 +18,7 @@ export default function ThemeToggle() {
       type="button"
       class="theme-toggle kitty-button"
       aria-pressed={night() ? "true" : "false"}
-      aria-label={night() ? "Switch to day theme" : "Switch to comfy night theme"}
+      aria-label={night() ? "Switch to day mode" : "Switch to night mode"}
       onClick={() => {
         const enabled = !night();
         apply(enabled);
@@ -29,7 +29,7 @@ export default function ThemeToggle() {
         }
       }}
     >
-      {night() ? "Day mode" : "Comfy night"}
+      {night() ? "Day mode" : "Night mode"}
     </button>
   );
 }

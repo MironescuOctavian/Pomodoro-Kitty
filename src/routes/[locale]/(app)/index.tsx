@@ -1,3 +1,4 @@
+import HelpWindow from "#kitty/HelpWindow";
 import AppHeader from "#components/app/AppHeader";
 import Shop from "#kitty/Shop";
 import CatCondition from "#kitty/CatCondition";
@@ -6,9 +7,10 @@ import Preview from "#kitty/Preview";
 import { label } from "#kitty/labels";
 import Medal from "#kitty/Medal";
 import Tasks from "#kitty/Tasks";
-import GameGuide from "#kitty/GameGuide";
-import ProgressSidebar from "#kitty/ProgressSidebar";
-import MenuHelp, { MenuHelpProvider } from "#kitty/MenuHelp";
+import DashboardHelp from "#kitty/DashboardHelp";
+import FriendsDock from "#kitty/FriendsDock";
+import { useFocusRoom } from "#kitty/useFocusRoom";
+import MenuHelp, { MenuHelpProvider, MenuHelpOverlay } from "#kitty/MenuHelp";
 import TodayFocus from "#kitty/TodayFocus";
 import DailyFact from "#kitty/DailyFact";
 import CompanionLoading from "#kitty/CompanionLoading";
@@ -18,7 +20,6 @@ import Cat from "#kitty/Cat";
 import { useKitty } from "#kitty/useKitty";
 import {
   MAX_HEALTH,
-  LUNCH_PRICE,
   nextSessionMode,
   recordJournal,
   encourage,
@@ -36,11 +37,14 @@ import {
 
 const names = ["Mochi", "Miso", "Maple", "Peaches", "Clover", "Biscuit", "Pip", "Honey"];
 const modes: Mode[] = ["focus", "short", "long"];
-const panels = ["care", "food", "closet", "medals"] as const;
+const panels = ["food", "closet", "medals"] as const;
 
 export default function Home() {
-  const { game: g, ready, remaining, storageError, busy, earned, act } = useKitty();
-  const [panel, setPanel] = createSignal<(typeof panels)[number]>("care");
+  const { game: g, ready, remaining, storageError, busy, earned, act, syncRoom } = useKitty();
+  const room = useFocusRoom({ game: g, ready, busy, sync: syncRoom, act });
+  const timerLocked = () =>
+    busy() || Boolean(room.id() && (!room.connected() || !room.snapshot()?.host));
+  const [panel, setPanel] = createSignal<(typeof panels)[number]>("food");
   const [bought, setBought] = createSignal<{ name: string; price: number } | null>(null);
   let purchaseFeedbackTimeout: ReturnType<typeof setTimeout> | undefined;
   onSettled(() => () => clearTimeout(purchaseFeedbackTimeout));
@@ -55,23 +59,7 @@ export default function Home() {
   const requestPurchase = (item: Purchase) => setPurchase(item);
   const [name, setName] = createSignal("");
   const [editing, setEditing] = createSignal(false);
-  const [mood, setMood] = createSignal("");
-  const [reaction, setReaction] = createSignal(0);
-  let timeout: ReturnType<typeof setTimeout> | undefined;
-  onSettled(() => () => clearTimeout(timeout));
-  const celebrate = (state: string) => {
-    clearTimeout(timeout);
-    setMood(state);
-    setReaction((value) => value + 1);
-    timeout = setTimeout(() => setMood(""), 2400);
-  };
   const hidden = () => g().health + g().bonus === 0;
-  createEffect(
-    () => earned(),
-    (coins) => {
-      if (coins > 0) celebrate("gift");
-    },
-  );
   const focused = () => g().timer.deadline > 0 && g().timer.mode === "focus";
   const care = (action: (game: Game) => void) => {
     if (!focused()) act(action);
@@ -109,7 +97,6 @@ export default function Home() {
                     care((game) => {
                       if (!busy() && !game.gift) {
                         claimDaily(game);
-                        celebrate("gift");
                       }
                     })
                   }
@@ -143,22 +130,14 @@ export default function Home() {
                 <p class="eyebrow">{t("ui.eyebrow")}</p>
                 <h1>{t("kitty.adopt-title")}</h1>
                 <p class="kitty-muted">{t("kitty.adopt-text")}</p>
-                <Cat
-                  coat={0}
-                  head={0}
-                  neck={0}
-                  state="idle"
-                  label={t("kitty.pet")}
-                  reaction={reaction()}
-                  onPet={() => {}}
-                />
+                <Cat coat={0} head={0} neck={0} state="idle" label={t("kitty.pet")} />
                 <button
                   class="kitty-button kitty-primary"
                   onClick={() =>
                     act((game) => {
                       game.adopted = true;
                       game.name = names[Math.floor(Math.random() * names.length)] ?? "Mochi";
-                      game.coat = Math.floor(Math.random() * 3);
+                      game.coat = 0;
                       recordJournal(
                         game,
                         "hello",
@@ -174,10 +153,13 @@ export default function Home() {
             }
           >
             <div class="dashboard-with-guide">
-              <ProgressSidebar game={g()} />
+              <FriendsDock room={room} busy={busy()} />
               <div class="focus-layout">
                 <section class="focus-desk" aria-label={t("timer.mode")}>
                   <div class="timer-sheet">
+                    <p class="focus-eyebrow">
+                      {focused() ? "A little focus, a little company" : "Time to focus"}
+                    </p>
                     <h1 class="desk-title">
                       {g().timer.mode === "focus" ? t("ui.desk-title") : t("ui.break-title")}
                     </h1>
@@ -188,7 +170,12 @@ export default function Home() {
                           <button
                             type="button"
                             aria-pressed={g().timer.mode === mode ? "true" : "false"}
-                            onClick={() => act((game) => resetTimer(game, mode))}
+                            disabled={timerLocked()}
+                            onClick={() =>
+                              room.id()
+                                ? room.control("mode", mode)
+                                : act((game) => resetTimer(game, mode))
+                            }
                           >
                             {t(`timer.${mode}`)}
                           </button>
@@ -223,16 +210,34 @@ export default function Home() {
                       <button
                         type="button"
                         class="kitty-button kitty-primary start-button"
-                        disabled={busy()}
+                        disabled={timerLocked()}
                         onClick={() =>
-                          act((game) => {
-                            if (!game.timer.remaining && !game.timer.deadline)
-                              resetTimer(game, nextSessionMode(game));
-                            toggle(game, Date.now());
-                          })
+                          room.id()
+                            ? room.control(
+                                "toggle",
+                                remaining() === 0 ? nextSessionMode(g()) : undefined,
+                              )
+                            : act((game) => {
+                                if (!game.timer.remaining && !game.timer.deadline)
+                                  resetTimer(game, nextSessionMode(game));
+                                toggle(game, Date.now());
+                              })
                         }
                       >
-                        <span aria-hidden="true">{g().timer.deadline ? "Ⅱ" : "▶"}</span>
+                        <svg class="timer-action-icon" viewBox="0 0 24 24" aria-hidden="true">
+                          <Show
+                            when={g().timer.deadline}
+                            fallback={
+                              <path
+                                d="M8 5.5 Q6 4.5 6 7v10q0 2.5 2 1.5l11-6q2-1 0-2Z"
+                                fill="currentColor"
+                              />
+                            }
+                          >
+                            <rect x="5" y="4" width="5" height="16" rx="2" fill="currentColor" />
+                            <rect x="14" y="4" width="5" height="16" rx="2" fill="currentColor" />
+                          </Show>
+                        </svg>
                         {g().timer.deadline
                           ? t("timer.pause")
                           : remaining() === 0
@@ -250,7 +255,10 @@ export default function Home() {
                       <button
                         type="button"
                         class="kitty-button reset-button"
-                        onClick={() => act((game) => resetTimer(game))}
+                        disabled={timerLocked()}
+                        onClick={() =>
+                          room.id() ? room.control("reset") : act((game) => resetTimer(game))
+                        }
                       >
                         {t("timer.reset")}
                       </button>
@@ -258,6 +266,15 @@ export default function Home() {
                     <p class="timer-reward kitty-muted">
                       {g().timer.mode === "focus" ? t("kitty.focus-reward") : t("ui.break-reward")}
                     </p>
+                    <Show when={room.id()}>
+                      <p class="shared-timer-note" role="status">
+                        {!room.connected()
+                          ? "Reconnecting to your shared timer…"
+                          : room.snapshot()?.host
+                            ? "You’re hosting · your friend follows this timer"
+                            : "Focusing together · your friend controls the timer"}
+                      </p>
+                    </Show>
                     <Show when={earned() > 0}>
                       <p role="status" class="earned-note">
                         +{earned()} {t("kitty.earned")}
@@ -269,6 +286,9 @@ export default function Home() {
                 </section>
 
                 <aside class="companion">
+                  <MenuHelpOverlay />
+                  <DashboardHelp game={g()} />
+                  <p class="companion-eyebrow">Your companion</p>
                   <div class="companion-topline">
                     <div class="companion-heading">
                       <div class="cat-name">
@@ -293,10 +313,12 @@ export default function Home() {
                       {g().coins.toLocaleString("en-US")} {t("kitty.coins")}
                     </span>
                   </div>
-                  <p class="purchase-feedback" role="status" aria-live="polite">
-                    {bought() ? `Bought ${bought()!.name} for ${bought()!.price} coins` : ""}
-                  </p>
-                  <Show when={editing()}>
+                  <HelpWindow
+                    open={editing()}
+                    title="Rename your companion"
+                    close={() => setEditing(false)}
+                    class="rename-window"
+                  >
                     <form
                       class="rename-form"
                       onSubmit={(e) => {
@@ -327,11 +349,13 @@ export default function Home() {
                         {t("kitty.save")} · {[0, 5, 10][g().renames]} {t("kitty.coins")}
                       </button>
                     </form>
-                  </Show>
+                  </HelpWindow>
+
                   <div class="companion-upper">
                     <div class="companion-room">
                       <Cat
-                        reaction={reaction()}
+                        friend={room.snapshot()?.friend ?? undefined}
+                        friendOnline={room.connected() && Boolean(room.snapshot()?.friend?.online)}
                         bowl={g().bowl}
                         waterLabel={t("kitty.water")}
                         coat={g().coat}
@@ -340,13 +364,13 @@ export default function Home() {
                         state={
                           hidden()
                             ? "hidden"
-                            : mood() ||
-                              (g().timer.deadline ? (focused() ? "focus" : "break") : "idle")
+                            : g().timer.deadline
+                              ? focused()
+                                ? "focus"
+                                : "break"
+                              : "idle"
                         }
                         label={t("kitty.pet")}
-                        onPet={() => {
-                          if (!focused()) celebrate("happy");
-                        }}
                       />
                       <p role="status" class="cat-status">
                         {status()}
@@ -374,7 +398,7 @@ export default function Home() {
                     </nav>
                     <div
                       id="companion-panel"
-                      class={`companion-panel ${panel() === "care" ? "care-page" : ""}`}
+                      class="companion-panel"
                       tabindex="0"
                       role="region"
                       aria-label={t.raw(`kitty.${panel()}`)}
@@ -419,22 +443,33 @@ export default function Home() {
                         <Show when={focused()}>
                           <p class="kitty-note">{t("kitty.focus-quiet")}</p>
                         </Show>
-                        <Show when={panel() === "care"}>
+                        <Show when={panel() === "food"}>
                           <div class="menu-page">
                             <header class="menu-header">
-                              <h3 class="kitty-heading">
-                                {t("kitty.care-title")}{" "}
-                                <MenuHelp title="Caring for your cat">
-                                  <p>
-                                    Food restores hearts. Catnip protects your cat during focus
-                                    sessions. Care and shopping are paused while a focus session is
-                                    running.
-                                  </p>
-                                </MenuHelp>
-                              </h3>
-                              <p class="kitty-muted">{t("ui.care-help")}</p>
+                              <h3 class="kitty-heading">{t("kitty.food-title")}</h3>
+                              <MenuHelp title="Food & care points" label={t("ui.food-help")}>
+                                <ul>
+                                  <li>
+                                    <strong>Restore hearts:</strong> each meal shows its red-heart
+                                    and golden bonus-heart amounts. Meals that cannot help are
+                                    unavailable.
+                                  </li>
+                                  <li>
+                                    <strong>Care points available: {g().careCredits}.</strong>{" "}
+                                    Complete a focus session to earn one more.
+                                  </li>
+                                  <li>
+                                    <strong>Counted feeds:</strong> a useful meal spends one care
+                                    point and advances accessory and medal milestones.
+                                  </li>
+                                  <li>
+                                    <strong>No point? Still a meal.</strong> Food restores hearts
+                                    even when it cannot advance milestones.
+                                  </li>
+                                </ul>
+                              </MenuHelp>
                             </header>
-                            <div class="menu-list">
+                            <div class="menu-list food-list">
                               <Show when={hidden()}>
                                 <div class="kitty-note">
                                   <p>{t("kitty.rescue-text")}</p>
@@ -445,7 +480,6 @@ export default function Home() {
                                       care((game) => {
                                         game.health = 2;
                                         game.hunger = 0;
-                                        celebrate("happy");
                                       })
                                     }
                                   >
@@ -453,69 +487,6 @@ export default function Home() {
                                   </button>
                                 </div>
                               </Show>
-                              <div
-                                class={`care-row ${bought()?.name === t("kitty.protection") ? "just-purchased" : ""}`}
-                              >
-                                <Preview item="flower" />
-                                <span class="care-label">
-                                  <strong>
-                                    {t("kitty.protection")}{" "}
-                                    <MenuHelp title="Catnip">
-                                      <p>
-                                        Spend {LUNCH_PRICE} coins to prevent heart loss for the next
-                                        4 focus sessions. Protection stacks when you buy more
-                                        catnip.
-                                      </p>
-                                    </MenuHelp>
-                                  </strong>
-                                  <small>
-                                    {g().protection} {t("kitty.protected-left")}
-                                  </small>
-                                  <Show when={g().coins < LUNCH_PRICE}>
-                                    <small>Need {LUNCH_PRICE - g().coins} more coins</small>
-                                  </Show>
-                                </span>
-                                <button
-                                  class="kitty-button"
-                                  disabled={focused() || g().coins < LUNCH_PRICE}
-                                  onClick={() =>
-                                    requestPurchase({
-                                      name: t("kitty.protection"),
-                                      price: LUNCH_PRICE,
-                                      art: "flower",
-                                      action: (game) => {
-                                        if (game.coins >= LUNCH_PRICE) {
-                                          game.coins -= LUNCH_PRICE;
-                                          game.protection += 4;
-                                          recordJournal(
-                                            game,
-                                            "care",
-                                            `${game.name} enjoyed some catnip. Four more focus sessions, feeling cared for.`,
-                                          );
-                                        }
-                                      },
-                                    })
-                                  }
-                                >
-                                  <Preview item="coins" />
-                                  {LUNCH_PRICE} {t("kitty.coins")}
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        </Show>
-                        <Show when={panel() === "food"}>
-                          <div class="menu-page">
-                            <header class="menu-header">
-                              <h3 class="kitty-heading">{t("kitty.food-title")}</h3>
-                              <MenuHelp title="Food & care points" label={t("ui.food-help")}>
-                                <p class="kitty-muted">{t("kitty.food-info")}</p>
-                                <p class="kitty-muted">
-                                  {g().careCredits} {t("kitty.feed-credits")}
-                                </p>
-                              </MenuHelp>
-                            </header>
-                            <div class="menu-list food-list">
                               <For each={foods}>
                                 {(food, i) => (
                                   <div
@@ -531,15 +502,17 @@ export default function Home() {
                                           : ""}
                                       </small>
                                     </span>
-                                    <span class="product-state">
-                                      {hidden()
-                                        ? "Bring your cat back first"
-                                        : g().health === MAX_HEALTH &&
-                                            (!food.bonus || g().bonus === 12)
-                                          ? "Already full"
-                                          : g().coins < food.price
-                                            ? `Need ${food.price - g().coins} more coins`
-                                            : "Ready to feed"}
+                                    <span class="product-state" role="status" aria-live="polite">
+                                      {bought()?.name === label("food", i())
+                                        ? `Bought · ${bought()!.price} coins`
+                                        : hidden()
+                                          ? "Bring your cat back first"
+                                          : g().health === MAX_HEALTH &&
+                                              (!food.bonus || g().bonus === 12)
+                                            ? "Already full"
+                                            : g().coins < food.price
+                                              ? `Need ${food.price - g().coins} more coins`
+                                              : "Ready to feed"}
                                     </span>
                                     <button
                                       class="kitty-button"
@@ -557,7 +530,7 @@ export default function Home() {
                                           price: food.price,
                                           art: `food-${i()}`,
                                           action: (game) => {
-                                            if (feed(game, i())) celebrate("fed");
+                                            feed(game, i());
                                           },
                                         })
                                       }
@@ -621,37 +594,9 @@ export default function Home() {
                         </Show>
                       </div>
                     </div>
-                    <section class="break-rewards" aria-labelledby="break-rewards-heading">
-                      <h3 id="break-rewards-heading">Break rewards</h3>
-                      <For each={["short", "long"] as const}>
-                        {(mode) => (
-                          <div class="break-reward-row">
-                            <Preview item="gift" />
-                            <div>
-                              <div class="break-reward-label">
-                                <strong>{mode === "short" ? "Short" : "Long"} break rewards</strong>
-                                <span>
-                                  {g()[mode]}/{mode === "short" ? 5 : 3}
-                                </span>
-                              </div>
-                              <progress
-                                value={g()[mode]}
-                                max={mode === "short" ? 5 : 3}
-                                aria-label={mode + " break rewards"}
-                              />
-                            </div>
-                          </div>
-                        )}
-                      </For>
-                      <MenuHelp title="Break rewards" label="How rewards work">
-                        <p>{t("kitty.bowl-rule")}</p>
-                        <p>{t("kitty.away")}</p>
-                      </MenuHelp>
-                    </section>
                   </div>
                 </aside>
               </div>
-              <GameGuide game={g()} />
             </div>
           </Show>
         </Show>

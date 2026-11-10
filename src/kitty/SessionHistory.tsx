@@ -15,22 +15,25 @@ export default function SessionHistory(props: { game: Game }) {
         }
       >
         <ol class="history-list" tabindex="0" aria-label="Completed sessions, newest first">
-          <For each={[...props.game.sessionHistory].reverse()}>
+          <For
+            each={[...props.game.sessionHistory].reverse()}
+            keyed={(entry) => `${entry.mode}-${entry.completedAt}`}
+          >
             {(entry) => (
               <li>
-                <span class={`history-dot ${entry.mode}`} aria-hidden="true" />
+                <span class={`history-dot ${entry().mode}`} aria-hidden="true" />
                 <div>
                   <strong>
-                    {entry.mode === "focus"
+                    {entry().mode === "focus"
                       ? "Focus session"
-                      : entry.mode === "short"
+                      : entry().mode === "short"
                         ? "Short break"
                         : "Long break"}
                   </strong>
-                  <small>{durations[entry.mode] / 60} min completed</small>
+                  <small>{durations[entry().mode] / 60} min completed</small>
                 </div>
-                <time datetime={new Date(entry.completedAt).toISOString()}>
-                  {new Date(entry.completedAt).toLocaleTimeString([], {
+                <time datetime={new Date(entry().completedAt).toISOString()}>
+                  {new Date(entry().completedAt).toLocaleTimeString([], {
                     hour: "2-digit",
                     minute: "2-digit",
                   })}

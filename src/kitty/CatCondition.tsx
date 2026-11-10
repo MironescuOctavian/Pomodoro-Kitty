@@ -1,6 +1,7 @@
 import Preview from "./Preview";
 import MenuHelp from "./MenuHelp";
 import type { Game } from "./game";
+import StatusHearts from "./StatusHearts";
 
 export default function CatCondition(props: { game: Game }) {
   return (
@@ -10,38 +11,50 @@ export default function CatCondition(props: { game: Game }) {
         class="condition-trigger"
         trigger={
           <>
-            <Preview item="heart" />
-            <span>{props.game.health / 2}/3 hearts</span>
+            <StatusHearts health={props.game.health} bonus={props.game.bonus} />
           </>
         }
       >
-        <p>
-          Food restores hearts. Special meals add bonus hearts, which are used before regular
-          hearts. You currently have {props.game.bonus / 2} bonus hearts.
-        </p>
-        <p>
-          Without protection, your cat loses half a heart every two focus sessions. Being away
-          causes no damage.
-        </p>
+        <ul>
+          <li>
+            <strong>Red:</strong> {props.game.health / 2} of 3 regular hearts. Food restores the
+            amount shown on its card.
+          </li>
+          <li>
+            <strong>Gold:</strong> {props.game.bonus / 2} of 6 bonus hearts. Special meals add
+            these; hunger uses them first.
+          </li>
+          <li>
+            <strong>Hunger:</strong> half a heart every two completed focus sessions. No hearts are
+            lost while you are away.
+          </li>
+        </ul>
       </MenuHelp>
       <MenuHelp
         title="Water & break rewards"
-        class="condition-trigger"
+        class="condition-trigger water-hud"
         trigger={
           <>
             <Preview item="water" />
-            <span>Water {props.game.bowl}/8</span>
+            <span>
+              <span class="water-label">Water </span>
+              {props.game.bowl}/8
+            </span>
           </>
         }
       >
-        <p>
-          Finish a short break for 1 water mark or a long break for 2. Each new mark earns 1 coin.
-          Filling the bowl earns 4 extra coins.
-        </p>
-        <p>
-          The first 5 short and 3 long breaks completed each day can earn rewards. The bowl resets
-          at local midnight.
-        </p>
+        <ul>
+          <li>
+            <strong>Short break:</strong> +1 water mark. <strong>Long break:</strong> +2 marks.
+          </li>
+          <li>
+            <strong>Each new mark:</strong> +1 coin. <strong>Full bowl:</strong> +4 extra coins.
+          </li>
+          <li>
+            <strong>Daily limit:</strong> 5 short and 3 long rewarded breaks, up to 8 water marks.
+            Everything refreshes at local midnight.
+          </li>
+        </ul>
       </MenuHelp>
     </div>
   );

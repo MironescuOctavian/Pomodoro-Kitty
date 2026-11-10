@@ -1,33 +1,11 @@
-import { onSettled } from "solid-js";
 import { coatCatalog } from "./coats";
 import { durations, milestones, type Game } from "./game";
 import SessionHistory from "./SessionHistory";
-import CatJournal from "./CatJournal";
 
-export default function ProgressSidebar(props: { game: Game }) {
-  let disclosure!: HTMLDetailsElement;
-  onSettled(() => {
-    const wide = matchMedia("(min-width: 1884px) and (min-height: 740px)");
-    const small = matchMedia("(max-width: 1199px)");
-    const sync = () => {
-      disclosure.open = wide.matches || small.matches;
-    };
-    sync();
-    wide.addEventListener("change", sync);
-    small.addEventListener("change", sync);
-    return () => {
-      wide.removeEventListener("change", sync);
-      small.removeEventListener("change", sync);
-    };
-  });
+export default function ProgressSidebar(props: { game: Game; expanded?: boolean }) {
   return (
     <aside class="progress-sidebar" aria-label="Your progress">
-      <details
-        ref={(el) => {
-          disclosure = el;
-        }}
-        class="progress-disclosure"
-      >
+      <details class="progress-disclosure" open={props.expanded}>
         <summary>Your progress</summary>
         <div class="progress-panels">
           <section class="lifetime-tracker" aria-labelledby="lifetime-title">
@@ -57,7 +35,7 @@ export default function ProgressSidebar(props: { game: Game }) {
                 <dd>{props.game.totalBreaks}</dd>
               </div>
               <div>
-                <dt>Care feeds</dt>
+                <dt>Counted feeds</dt>
                 <dd>{props.game.feeds}</dd>
               </div>
               <div>
@@ -81,7 +59,6 @@ export default function ProgressSidebar(props: { game: Game }) {
             </p>
           </section>
           <SessionHistory game={props.game} />
-          <CatJournal game={props.game} />
         </div>
       </details>
     </aside>

@@ -31,7 +31,7 @@
     "preview": "vp preview",
     "deploy": "cf deploy",
     "check": "pnpm audit && cf workers types && vp check --fix",
-    "test": "node --test src/kitty/game.test.mjs"
+    "test": "node --test src/kitty/game.test.mjs src/kitty/behaviors.test.mjs src/kitty/room.test.mjs"
   },
   "dependencies": {
     "@rimelight/i18n": "0.1.20",

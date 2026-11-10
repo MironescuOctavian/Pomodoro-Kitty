@@ -20,9 +20,9 @@ Built with **Solid 2 · TypeScript · Vite+ · UnoCSS · Cloudflare Workers**.
 Also included: tasks with earned rewards, daily focus goals, session history,
 daily cat facts with sources, and day/night themes.
 
-**Artwork is intentionally unfinished.** The companion, brand, fact artwork, and
-item icons use neutral placeholders. Coat color swatches remain so purchases can
-still be compared. No pixel atlas, sprite renderer, or icon library is required.
+The companion uses pixel artwork with random actions, click-to-pet reactions,
+and coat-specific poses. Artwork is stored as lossless WebP; the shop and equipped
+cat share the same sprite atlases. See [artwork notes](public/art/README.md).
 
 ## Get started
 
@@ -39,7 +39,7 @@ task if you like, and start a focus session.
 | Command               | What it does                                                                              |
 | --------------------- | ----------------------------------------------------------------------------------------- |
 | `pnpm dev`            | Starts the development server                                                             |
-| `pnpm test`           | Runs the game-rule and save-migration tests                                               |
+| `pnpm test`           | Runs game rules, save migrations, behavior timing, and coat-art coverage tests            |
 | `pnpm build`          | Builds the browser app and Cloudflare Worker                                              |
 | `pnpm preview`        | Previews the production build locally                                                     |
 | `pnpm check`          | Audits dependencies, generates Worker types, and checks/fixes formatting, lint, and types |
@@ -69,6 +69,20 @@ switching are available; sessions never automatically repeat.
 
 Completing a session settles its rewards once. The app suggests a break after
 focus, with a long break after every fourth focus session.
+
+### Focus with a friend
+
+Open **Focus together** on the left of the dashboard to create or join a private
+invite. Rooms hold two people, expire after 24 hours, and use WebSockets backed
+by the `FocusRoom` Cloudflare Durable Object configured in `cloudflare.config.ts`.
+The host controls the shared timer; leaving transfers control to the friend.
+Reloading the same tab restores membership. Each browser keeps its own progress;
+join before a session starts to earn rewards. Only cat names and outfits are shared.
+
+With `pnpm dev` running, `node scripts/check-focus-room.mjs` checks two real
+WebSocket clients, room limits, reconnects and host transfer. Set `FOCUS_ROOM_URL`
+to test a different local port. Deploying requires the configured Durable Object
+binding and SQLite namespace; a static-only host cannot run multiplayer.
 
 ### Rewards and care
 
@@ -105,7 +119,8 @@ src/
     useKitty.ts            Reactive state, storage, timer lifecycle, tab lock
     coats.ts               Coat catalog, prices, and color swatches
     facts.ts               Daily facts and source links
-    Cat.tsx / Preview.tsx  Artwork placeholders and coat swatches
+    Cat.tsx / CatSprite.tsx Companion animation and equipped artwork
+    CoatArt.tsx / Preview.tsx Shared coat and item previews
     Tasks.tsx              Task creation, selection, completion, rewards
     Shop.tsx               Coat and accessory selection
     PurchaseDialog.tsx     Purchase review and confirmation
@@ -118,12 +133,10 @@ src/
   App.tsx                  Router
   Document.tsx             HTML shell and hydration
   fetch.ts                 Worker entry point
-uno/
-  preset.ts                Shared UnoCSS preset and coat swatch rules
-  foundation.ts            Base theme and page/component foundations
-  components.ts            Controls, menus, artwork slots, interactions
-  dashboard.ts             Dashboard layout and presentation
-  responsive.ts            Theme refinements and adaptive layouts
+  styles/
+    kitty.css              Shared foundations, controls and responsive styles
+    dashboard.css          Dashboard layout and theme rules
+    playful.css            Final visual refinements and animation styles
 docs/                      Design and economy audit notes
 uno.config.ts              UnoCSS presets, theme, reusable shortcuts
 vite.config.ts             Development/build plugins and SSR routing
@@ -132,12 +145,12 @@ cloudflare.config.ts       Worker and static asset configuration
 
 ### Styling
 
-**UnoCSS owns all application styles.** `Document.tsx` imports only
-`virtual:uno.css`; there are no standalone application CSS files or inline
-style attributes. Use utility classes and shortcuts for reusable UI. The local
-`presetKitty()` supplies ordered preflights for shared selectors, theme tokens,
-responsive layouts, and animations, plus generated rules for coat swatches.
-Keep the preflight order intact when changing shared styles.
+`Document.tsx` imports shared styles once, alongside UnoCSS utilities.
+`kitty.css` contains the former ordered preflights; keeping them outside the
+UnoCSS chunk generator avoids repeating the full stylesheet in every route.
+`dashboard.css` and `playful.css` follow with layout, theme and visual refinements.
+Preserve this order when changing styles. Coat previews use the same artwork
+as the equipped cat rather than generated swatch rules.
 
 ### Localization
 

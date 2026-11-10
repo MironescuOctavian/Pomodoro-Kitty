@@ -1,6 +1,7 @@
 import { t } from "@rimelight/i18n";
 import { createSignal } from "solid-js";
 import { factForDay } from "./facts";
+import Preview from "./Preview";
 
 export default function DailyFact(props: { day: string }) {
   const [offset, setOffset] = createSignal(0);
@@ -9,7 +10,7 @@ export default function DailyFact(props: { day: string }) {
     <section class="daily-fact-section" aria-labelledby="daily-fact-title">
       <div class="daily-fact">
         <div class="fact-title">
-          <span class="fact-art-placeholder" aria-hidden="true" />
+          <Preview item="book" />
           <h2 id="daily-fact-title">{t("ui.fact-title")}</h2>
         </div>
         <div class="fact-copy">

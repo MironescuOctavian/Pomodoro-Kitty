@@ -4,6 +4,56 @@ const anatomy =
 const bodyLanguage = "https://www.cats.org.uk/help-and-advice/cat-behaviour/cat-body-language";
 export const catFacts = [
   {
+    text: "Cats have scent glands between their paw pads. A scratch can leave a message as well as a mark.",
+    url: "https://www.cats.org.uk/help-and-advice/cat-behaviour/scratching",
+    source: "Cats Protection",
+  },
+  {
+    text: "A cheek rub can be a friendly greeting. Your cat is sharing a little familiar scent.",
+    url: bodyLanguage,
+    source: "Cats Protection",
+  },
+  {
+    text: "Relaxed whiskers sit closer to the face. Even tiny details can tell you how a cat feels.",
+    url: bodyLanguage,
+    source: "Cats Protection",
+  },
+  {
+    text: "Cats use their whole body to communicate, not just their faces. Watch the ears, tail and posture together.",
+    url: bodyLanguage,
+    source: "Cats Protection",
+  },
+  {
+    text: "Kneading is sometimes called making biscuits. It is that familiar alternating push of the front paws.",
+    url: "https://www.scottishspca.org/advice/cats/why-do-cats-make-biscuits/",
+    source: "Scottish SPCA",
+  },
+  {
+    text: "Kittens and senior cats often sleep more than adult cats. Different ages, different nap schedules.",
+    url: "https://www.cats.org.uk/help-and-advice/cat-behaviour/cats-and-sleep",
+    source: "Cats Protection",
+  },
+  {
+    text: "A sleeping cat may twitch their paws or mouth. Little movements can happen during deep sleep.",
+    url: "https://www.cats.org.uk/help-and-advice/cat-behaviour/cats-and-sleep",
+    source: "Cats Protection",
+  },
+  {
+    text: "Cats have REM sleep, like humans. Scientists think that cats are likely to dream, too.",
+    url: "https://www.cats.org.uk/cats-blog/do-cats-dream",
+    source: "Cats Protection",
+  },
+  {
+    text: "A soft, relaxed posture is a useful sign of comfort. Read it together with the ears and eyes.",
+    url: bodyLanguage,
+    source: "Cats Protection",
+  },
+  {
+    text: "Cats leave scent messages when they scratch. The marks and scent work together as a feline noticeboard.",
+    url: "https://www.cats.org.uk/help-and-advice/cat-behaviour/scratching",
+    source: "Cats Protection",
+  },
+  {
     text: "Cats nap for around 12–18 hours a day. Your focus buddy takes rest very seriously.",
     url: "https://science.rspca.org.uk/en/web/rspca/adviceandwelfare/pets/cats",
     source: "RSPCA",

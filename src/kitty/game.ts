@@ -7,7 +7,6 @@ export const coats = coatCatalog.map((coat) => coat.swatch);
 export const prices = coatCatalog.map((coat) => coat.price);
 export const milestones = [1, 3, 5, 8, 12, 18, 25, 35, 50, 75, 100];
 export const FOCUS_COINS = 6;
-export const LUNCH_PRICE = 4;
 export const foods = [
   { price: 1, heal: 1, bonus: 0 },
   { price: 2, heal: 2, bonus: 0 },
@@ -69,7 +68,6 @@ export const schema = z.object({
   sessions: integer(1e9),
   hunger: integer(1),
   careCredits: integer(1e9),
-  protection: integer(1e6),
   renames: integer(3),
   coat: integer(coatCatalog.length - 1),
   owned: z.array(integer(coatCatalog.length - 1)).max(coatCatalog.length),
@@ -81,6 +79,8 @@ export const schema = z.object({
   short: integer(5),
   long: integer(3),
   timer: z.object({
+    roomSession: z.string().default(""),
+    eligible: z.boolean().default(true),
     mode: z.enum(["focus", "short", "long"]),
     remaining: integer(1500000),
     deadline: z.number().min(0),
@@ -107,7 +107,6 @@ export function readSave(input: unknown) {
       "bonus",
       "hunger",
       "careCredits",
-      "protection",
       "renames",
       "coat",
       "owned",
@@ -174,7 +173,7 @@ export function initial(now = Date.now()): Game {
     adopted: false,
     name: "Mochi",
     coins: 5,
-    health: 6,
+    health: 2,
     tasks: [],
     taskCredits: 0,
     taskClaims: 0,
@@ -192,7 +191,6 @@ export function initial(now = Date.now()): Game {
     sessions: 0,
     hunger: 0,
     careCredits: 1,
-    protection: 0,
     renames: 0,
     coat: 0,
     owned: [0, 1, 2],
@@ -208,6 +206,8 @@ export function initial(now = Date.now()): Game {
 }
 function timerState(mode: Mode = "focus") {
   return {
+    roomSession: "",
+    eligible: true,
     mode,
     remaining: durations[mode] * 1000,
     deadline: 0,
@@ -299,6 +299,13 @@ export function settle(g: Game, now: number, random = Math.random) {
   const timer = g.timer;
   if (!timer.deadline) return 0;
   timer.remaining = Math.max(0, timer.deadline - now);
+  if (!timer.eligible) {
+    if (!timer.remaining) {
+      timer.deadline = 0;
+      timer.started = false;
+    }
+    return 0;
+  }
   let coins = 0;
   if (timer.giftCoins && timer.remaining <= timer.giftAt) {
     coins += timer.giftCoins;
@@ -323,14 +330,11 @@ export function settle(g: Game, now: number, random = Math.random) {
       g.taskCredits = Math.min(3 - g.taskClaims, g.taskCredits + 1);
       g.careCredits++;
       if (g.adopted && g.health + g.bonus > 0) {
-        if (g.protection > 0) g.protection--;
-        else {
-          g.hunger++;
-          if (g.hunger >= 2) {
-            if (g.bonus) g.bonus--;
-            else g.health--;
-            g.hunger = 0;
-          }
+        g.hunger++;
+        if (g.hunger >= 2) {
+          if (g.bonus) g.bonus--;
+          else g.health--;
+          g.hunger = 0;
         }
       }
     } else if (timer.reward) {

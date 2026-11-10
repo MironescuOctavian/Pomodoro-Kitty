@@ -6,6 +6,7 @@ import Preview from "./Preview";
 import MenuHelp from "./MenuHelp";
 import { coatCatalog } from "./coats";
 import type { Purchase } from "./PurchaseDialog";
+import { accessories } from "./accessories";
 
 export default function Shop(props: {
   game: Game;
@@ -37,11 +38,19 @@ export default function Shop(props: {
         <h3 class="kitty-heading">
           {t("kitty.closet-title")}{" "}
           <MenuHelp title="Your closet">
-            <p>
-              Coats are cosmetic. Buy a coat once, then equip it for free whenever you like.
-              Accessories unlock through feeding milestones. Feeding counts toward milestones when
-              you have a care point earned from focus.
-            </p>
+            <ul>
+              <li>
+                <strong>Coats:</strong> buy once, then wear any owned coat for free.
+              </li>
+              <li>
+                <strong>Accessories:</strong> unlock through counted feeding milestones. Wear one
+                head item and one neck item together.
+              </li>
+              <li>
+                <strong>Counted feeds:</strong> a useful meal uses one care point earned from focus.
+                Extra meals still restore hearts.
+              </li>
+            </ul>
           </MenuHelp>
         </h3>
         <p class="kitty-muted">{t("ui.closet-help")}</p>
@@ -77,11 +86,19 @@ export default function Shop(props: {
           <span class="accessory-progress">
             {props.game.feeds} counted feeds · {props.game.careCredits} care points
             <MenuHelp title="Accessory milestones">
-              <p>
-                Finish a focus session to earn one care point. Feeding your cat uses one point and
-                adds one counted feed toward accessories and medals. Extra feeding still heals your
-                cat, but does not advance milestones without a point.
-              </p>
+              <ol>
+                <li>
+                  <strong>Focus:</strong> complete a session to earn 1 care point.
+                </li>
+                <li>
+                  <strong>Feed:</strong> a meal that restores hearts uses 1 point and adds 1 counted
+                  feed.
+                </li>
+                <li>
+                  <strong>Collect:</strong> counted feeds unlock accessories and friendship medals.
+                </li>
+              </ol>
+              <p>Without a care point, meals still restore hearts but do not advance milestones.</p>
               <p>
                 {milestones.find((count) => count > props.game.feeds)
                   ? `Next unlock: ${milestones.find((count) => count > props.game.feeds)} counted feeds.`
@@ -126,14 +143,14 @@ export default function Shop(props: {
                     <Preview item="coat" color={color} />
                     <strong>{label("coat", i())}</strong>
                     <span class="closet-description">{coatCatalog[i()]?.description}</span>
-                    <span class="product-state">
-                      {props.game.coat === i()
-                        ? "Equipped"
+                    <span class="product-state" role="status" aria-live="polite">
+                      {props.recentPurchase === label("coat", i())
+                        ? "Bought · ready to wear"
                         : props.game.owned.includes(i())
-                          ? "Owned"
+                          ? ""
                           : props.game.coins < (prices[i()] ?? 0)
                             ? `Need ${(prices[i()] ?? 0) - props.game.coins} more coins`
-                            : "Available to buy"}
+                            : `${prices[i()]} coins`}
                     </span>
                     <button
                       class="kitty-button"
@@ -159,16 +176,11 @@ export default function Shop(props: {
                         )
                       }
                     >
-                      {props.game.coat === i() ? (
-                        "Equipped"
-                      ) : props.game.owned.includes(i()) ? (
-                        "Equip"
-                      ) : (
-                        <>
-                          <Preview item="coins" />
-                          {prices[i()]} coins
-                        </>
-                      )}
+                      {props.game.coat === i()
+                        ? "Equipped"
+                        : props.game.owned.includes(i())
+                          ? "Equip"
+                          : "Buy"}
                     </button>
                   </div>
                 </Show>
@@ -181,13 +193,7 @@ export default function Shop(props: {
             <For each={milestones}>
               {(count, i) => (
                 <div class="pal-product closet-product">
-                  <Preview
-                    item={
-                      ({ 4: "hat", 6: "flower", 8: "hat", 10: "crown" } as Record<number, string>)[
-                        i()
-                      ] ?? (i() % 2 ? "collar" : "bow")
-                    }
-                  />
+                  <Preview item={accessories[i()]?.art ?? "bow"} />
                   <strong>{label("accessory", i())}</strong>
                   <span class="closet-description">Unlock at {count} feeds</span>
                   <span class="product-state">

@@ -17,3 +17,5 @@ coverage/
 reports/
 output/qa/bundle/
 output/qa/*.html
+output/design/
+output/animation-frames.html

@@ -1,6 +1,7 @@
 import { createSignal, For, Show } from "solid-js";
 import { t } from "@rimelight/i18n";
 import { addTask, toggleTask, type Game } from "./game";
+import MenuHelp from "./MenuHelp";
 
 export default function Tasks(props: { game: Game; act: (action: (game: Game) => void) => void }) {
   const [draft, setDraft] = createSignal("");
@@ -16,8 +17,7 @@ export default function Tasks(props: { game: Game; act: (action: (game: Game) =>
             </span>
           </Show>
         </h2>
-        <details class="task-details">
-          <summary>Task rewards</summary>
+        <MenuHelp title="Task rewards" label="Task rewards" class="task-rewards-help">
           <div class="task-reward-explanation">
             <p class="task-reward-balance">
               {props.game.taskClaims >= 3
@@ -32,23 +32,23 @@ export default function Tasks(props: { game: Game; act: (action: (game: Game) =>
               available do not earn coins later.
             </p>
           </div>
-        </details>
+        </MenuHelp>
       </div>
       <ul class="task-list" tabindex="0" aria-label={t("ui.tasks-title")}>
         <Show when={!props.game.tasks.length}>
           <li class="task-empty">What would you like to work on?</li>
         </Show>
-        <For each={props.game.tasks}>
+        <For each={props.game.tasks} keyed={(task) => task.id}>
           {(task) => (
-            <li class={`task-item ${props.game.currentTask === task.id ? "current-task" : ""}`}>
+            <li class={`task-item ${props.game.currentTask === task().id ? "current-task" : ""}`}>
               <label>
                 <input
                   type="checkbox"
-                  checked={task.done}
+                  checked={task().done}
                   onChange={() =>
                     props.act((game) => {
-                      const reward = toggleTask(game, task.id);
-                      const completed = game.tasks.find((item) => item.id === task.id)?.done;
+                      const reward = toggleTask(game, task().id);
+                      const completed = game.tasks.find((item) => item.id === task().id)?.done;
                       setRewardNotice(
                         reward
                           ? "Task complete · earned 1 coin"
@@ -61,30 +61,30 @@ export default function Tasks(props: { game: Game; act: (action: (game: Game) =>
                     })
                   }
                 />
-                <span class={task.done ? "task-done" : ""}>{task.text}</span>
+                <span class={task().done ? "task-done" : ""}>{task().text}</span>
               </label>
               <button
                 type="button"
                 class="task-select"
-                disabled={task.done}
-                aria-label={`Focus on: ${task.text}`}
-                aria-pressed={props.game.currentTask === task.id ? "true" : "false"}
+                disabled={task().done}
+                aria-label={`Focus on: ${task().text}`}
+                aria-pressed={props.game.currentTask === task().id ? "true" : "false"}
                 onClick={() =>
                   props.act((game) => {
-                    game.currentTask = game.currentTask === task.id ? "" : task.id;
+                    game.currentTask = game.currentTask === task().id ? "" : task().id;
                   })
                 }
               >
-                {props.game.currentTask === task.id ? "Focusing" : "Focus"}
+                {props.game.currentTask === task().id ? "Focusing" : "Focus"}
               </button>
               <button
                 type="button"
                 class="quiet-button task-delete"
-                aria-label={`${t("tasks.delete")}: ${task.text}`}
+                aria-label={`${t("tasks.delete")}: ${task().text}`}
                 onClick={() =>
                   props.act((game) => {
-                    game.tasks = game.tasks.filter((item) => item.id !== task.id);
-                    if (game.currentTask === task.id) game.currentTask = "";
+                    game.tasks = game.tasks.filter((item) => item.id !== task().id);
+                    if (game.currentTask === task().id) game.currentTask = "";
                   })
                 }
               >
@@ -130,15 +130,12 @@ export default function Tasks(props: { game: Game; act: (action: (game: Game) =>
           <span class="task-add-count">{props.game.taskAdds}/10 added today</span>
         </form>
       </div>
-      <Show when={props.game.taskAdds >= 10}>
-        <p class="task-daily-limit">You’ve added today’s 10 tasks. You can add more tomorrow.</p>
-      </Show>
-      <Show when={props.game.tasks.length >= 30}>
-        <p class="kitty-muted">{t("tasks.limit")}</p>
-      </Show>
-
       <p class="task-reward-notice" role="status">
-        {rewardNotice()}
+        {props.game.taskAdds >= 10
+          ? "Today’s 10 tasks are added. You can add more tomorrow."
+          : props.game.tasks.length >= 30
+            ? t("tasks.limit")
+            : rewardNotice()}
       </p>
     </section>
   );

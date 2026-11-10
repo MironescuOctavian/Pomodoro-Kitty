@@ -5,10 +5,9 @@ export default function Brand() {
   const params = useParams();
   return (
     <a href={getLocaleUrl("/", params["locale"])} class="app-brand" aria-label={t("app.name")}>
-      <span
-        class="h-8 w-8 shrink-0 rounded-lg border border-dashed border-[var(--rule)] bg-[var(--paper)]"
-        aria-hidden="true"
-      />
+      <svg class="brand-cat" viewBox="250 200 810 810" aria-hidden="true">
+        <image href="/art/companion.webp" width="1296" height="1213" />
+      </svg>
       <span>
         {t("app.name")}
         <span class="brand-dot" aria-hidden="true">

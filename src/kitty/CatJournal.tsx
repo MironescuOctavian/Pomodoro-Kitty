@@ -6,7 +6,7 @@ export default function CatJournal(props: { game: Game }) {
     <section class="cat-journal" aria-labelledby="journal-title">
       <header>
         <h3 id="journal-title">Cat journal</h3>
-        <span>Little moments together</span>
+        <span>Your latest 40 little moments together</span>
       </header>
       <Show
         when={props.game.journal.length}
@@ -17,14 +17,14 @@ export default function CatJournal(props: { game: Game }) {
         }
       >
         <ol class="journal-list" tabindex="0" aria-label="Cat journal, newest first">
-          <For each={[...props.game.journal].reverse()}>
+          <For each={[...props.game.journal].reverse()} keyed={(entry) => entry.id}>
             {(entry) => (
-              <li class={`journal-entry journal-${entry.kind}`}>
+              <li class={`journal-entry journal-${entry().kind}`}>
                 <span class="journal-mark" aria-hidden="true" />
                 <div>
-                  <p>{entry.text}</p>
-                  <time datetime={new Date(entry.at).toISOString()}>
-                    {new Date(entry.at).toLocaleString([], {
+                  <p>{entry().text}</p>
+                  <time datetime={new Date(entry().at).toISOString()}>
+                    {new Date(entry().at).toLocaleString([], {
                       month: "short",
                       day: "numeric",
                       hour: "2-digit",

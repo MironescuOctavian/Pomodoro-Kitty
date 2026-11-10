@@ -1,4 +1,4 @@
-import { bindings, defineConfig } from "cf/config";
+import { bindings, defineConfig, exports } from "cf/config";
 
 export default defineConfig({
   worker: {
@@ -13,6 +13,10 @@ export default defineConfig({
     },
     logpush: false,
     cache: { enabled: true },
-    env: { ASSETS: bindings.assets() },
+    exports: { FocusRoom: exports.durableObject({ storage: "sqlite" }) },
+    env: {
+      ASSETS: bindings.assets(),
+      FOCUS_ROOMS: bindings.durableObject({ worker: "pomodoro-kitty", exportName: "FocusRoom" }),
+    },
   },
 });

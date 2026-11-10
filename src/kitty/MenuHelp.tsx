@@ -7,6 +7,7 @@ import {
   type Accessor,
 } from "solid-js";
 import type { JSX } from "@solidjs/web";
+import HelpWindow from "./HelpWindow";
 type Explanation = { title: string; content: JSX.Element };
 const HelpContext = createContext<{
   selected: Accessor<Explanation | null>;
@@ -61,7 +62,8 @@ export default function MenuHelp(
     <button
       type="button"
       class={props.class ?? "menu-help-button"}
-      title="Explain in the guide panel"
+      title="Open explanation"
+      aria-haspopup="dialog"
       aria-label={props.label ?? props.title}
       aria-pressed={help.selected()?.title === props.title ? "true" : "false"}
       onClick={() => help.select({ title: props.title, content: props.children })}
@@ -72,5 +74,18 @@ export default function MenuHelp(
       </span>
       {props.label}
     </button>
+  );
+}
+
+export function MenuHelpOverlay() {
+  const help = useContext(HelpContext)!;
+  return (
+    <HelpWindow
+      open={help.selected() !== null}
+      title={help.selected()?.title ?? "A little guidance"}
+      close={() => help.select(null)}
+    >
+      <Show when={help.selected()}>{(item) => <>{item().content}</>}</Show>
+    </HelpWindow>
   );
 }
