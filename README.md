@@ -44,7 +44,7 @@ task if you like, and start a focus session.
 | `pnpm preview`        | Previews the production build locally                                                     |
 | `pnpm check`          | Audits dependencies, generates Worker types, and checks/fixes formatting, lint, and types |
 | `pnpm generate-types` | Regenerates Cloudflare Worker types                                                       |
-| `pnpm deploy`         | Deploys using your configured Cloudflare account                                          |
+| `pnpm run deploy`     | Deploys using your configured Cloudflare account                                          |
 
 ## How the app works
 
@@ -174,8 +174,15 @@ progress. Different browsers and devices have separate saves.
 ## Deployment
 
 `pnpm build` produces the client and Worker bundles. With your Cloudflare
-account configured, run `pnpm deploy`. Worker settings live in
+account configured, run `pnpm run deploy`. Worker settings live in
 `cloudflare.config.ts`; the Worker is named `pomodoro-kitty`.
+
+For Cloudflare Workers Builds, leave the build command empty and set the deploy
+command to `pnpm run deploy`. The deploy command builds before uploading. Replace the
+dashboard default `npx wrangler deploy`: Wrangler does not read this project's
+`cloudflare.config.ts` and attempts unsupported Hono autoconfiguration instead.
+
+To validate deployment locally without uploading, run `pnpm run deploy --dry-run`.
 
 ---
 
