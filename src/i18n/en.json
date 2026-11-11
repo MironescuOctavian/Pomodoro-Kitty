@@ -21,7 +21,8 @@
     "local": "Your progress is saved on this browser.",
     "footer-tagline": "A little focus. A little company. At your own pace.",
     "explore": "Stay connected",
-    "your-space": "Your own little space"
+    "your-space": "Your own little space",
+    "language": "Language"
   },
   "app": {
     "name": "Pomodoro Kitty",

@@ -44,16 +44,16 @@ pnpm dev
 Open the URL printed by the development server and adopt your cat. The Cloudflare
 Vite plugin runs the Worker and Durable Object locally.
 
-| Command | Purpose |
-| --- | --- |
-| `pnpm dev` | Start the development server |
-| `pnpm test` | Test game rules, saves, behavior/artwork, and room timer logic |
-| `pnpm build` | Build the client and Cloudflare Worker |
-| `pnpm preview` | Preview the production build locally |
-| `pnpm generate-types` | Generate Cloudflare Worker binding types |
-| `pnpm check` | Audit dependencies, generate types, and check/fix formatting, lint, and types |
-| `pnpm run deploy --dry-run` | Build and validate deployment without uploading |
-| `pnpm run deploy` | Build and deploy to Cloudflare |
+| Command                     | Purpose                                                                       |
+| --------------------------- | ----------------------------------------------------------------------------- |
+| `pnpm dev`                  | Start the development server                                                  |
+| `pnpm test`                 | Test game rules, saves, behavior/artwork, and room timer logic                |
+| `pnpm build`                | Build the client and Cloudflare Worker                                        |
+| `pnpm preview`              | Preview the production build locally                                          |
+| `pnpm generate-types`       | Generate Cloudflare Worker binding types                                      |
+| `pnpm check`                | Audit dependencies, generate types, and check/fix formatting, lint, and types |
+| `pnpm run deploy --dry-run` | Build and validate deployment without uploading                               |
+| `pnpm run deploy`           | Build and deploy to Cloudflare                                                |
 
 ## Focus with a friend
 
@@ -75,14 +75,14 @@ static-only hosting cannot run it.
 
 ## Rewards and care
 
-| Action | Result |
-| --- | --- |
-| Finish a focus session | 6 coins, 1 care point, and a task reward credit within the daily allowance |
-| Complete a new task with a credit available | 1 coin, up to 3 task coins per local day |
-| Finish a rewarded short / long break | 1 / 2 water marks and 1 coin per new mark |
-| Fill the eight-mark water bowl | 4 extra coins |
-| Claim daily pocket money | 1–3 coins, with no streak requirement |
-| Feed your cat with a care point available | Restore hearts and advance counted-feed milestones |
+| Action                                      | Result                                                                     |
+| ------------------------------------------- | -------------------------------------------------------------------------- |
+| Finish a focus session                      | 6 coins, 1 care point, and a task reward credit within the daily allowance |
+| Complete a new task with a credit available | 1 coin, up to 3 task coins per local day                                   |
+| Finish a rewarded short / long break        | 1 / 2 water marks and 1 coin per new mark                                  |
+| Fill the eight-mark water bowl              | 4 extra coins                                                              |
+| Claim daily pocket money                    | 1–3 coins, with no streak requirement                                      |
+| Feed your cat with a care point available   | Restore hearts and advance counted-feed milestones                         |
 
 The first **5 short breaks** and **3 long breaks** each day qualify for water
 rewards. The bowl, daily allowances, daily progress, and session history reset
@@ -130,10 +130,10 @@ pnpm run deploy
 
 For **Cloudflare Workers Builds**, use these dashboard settings:
 
-| Setting | Value |
-| --- | --- |
-| Build command | Leave empty; the deploy command builds first |
-| Deploy command | `pnpm run deploy` |
+| Setting        | Value                                        |
+| -------------- | -------------------------------------------- |
+| Build command  | Leave empty; the deploy command builds first |
+| Deploy command | `pnpm run deploy`                            |
 
 Replace the default `npx wrangler deploy`. Wrangler does not read this project's
 `cloudflare.config.ts` and attempts unsupported Hono autoconfiguration instead.
@@ -144,27 +144,26 @@ For CI authentication, configure `CLOUDFLARE_API_TOKEN` and
 
 ## Development map
 
-| Location | Responsibility |
-| --- | --- |
-| `src/fetch.ts` | Hono requests, room API, locale middleware, Solid SSR |
-| `src/App.tsx`, `src/Document.tsx` | Routing, translations, document shell, hydration, shared styles |
-| `src/routes/[locale]/(app)/index.tsx` | Main timer and companion workspace |
-| `src/kitty/game.ts`, `useKitty.ts` | Rules, save validation/migrations, persistence, timer lifecycle, tab lock |
-| `src/kitty/FocusRoom.ts`, `room.ts`, `useFocusRoom.ts` | Durable Object, shared timer protocol, browser connection |
-| `src/kitty/Friends.tsx`, `FriendsDock.tsx` | Invites and room interface |
-| `src/kitty/Shop.tsx`, `coats.ts`, `accessories.ts` | Closet, coat catalog, accessory unlocks |
-| `src/kitty/AnimatedCat.tsx`, `CatSprite.tsx`, `behaviors.ts` | Companion artwork, poses, and behavior |
-| `src/kitty/DashboardHelp.tsx`, `ProgressSidebar.tsx`, `CatJournal.tsx` | Progress, guide, history, journal dialogs |
-| `src/styles/` | Shared foundations, dashboard layout, themes, visual refinements |
-| `src/i18n/` | Translation JSON; English is the default locale |
-| `public/art/` | Lossless WebP room, cat, coat, pose, and inventory artwork |
-| `scripts/check-focus-room.mjs` | Integration check with real WebSocket clients |
-| `vite.config.ts`, `uno.config.ts` | Build plugins, file routes, utilities, theme configuration |
+| Location                                                               | Responsibility                                                            |
+| ---------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `src/fetch.ts`                                                         | Hono requests, room API, locale middleware, Solid SSR                     |
+| `src/App.tsx`, `src/Document.tsx`                                      | Routing, translations, document shell, hydration, shared styles           |
+| `src/routes/[locale]/(app)/index.tsx`                                  | Main timer and companion workspace                                        |
+| `src/kitty/game.ts`, `useKitty.ts`                                     | Rules, save validation/migrations, persistence, timer lifecycle, tab lock |
+| `src/kitty/FocusRoom.ts`, `room.ts`, `useFocusRoom.ts`                 | Durable Object, shared timer protocol, browser connection                 |
+| `src/kitty/Friends.tsx`, `FriendsDock.tsx`                             | Invites and room interface                                                |
+| `src/kitty/Shop.tsx`, `coats.ts`, `accessories.ts`                     | Closet, coat catalog, accessory unlocks                                   |
+| `src/kitty/AnimatedCat.tsx`, `CatSprite.tsx`, `behaviors.ts`           | Companion artwork, poses, and behavior                                    |
+| `src/kitty/DashboardHelp.tsx`, `ProgressSidebar.tsx`, `CatJournal.tsx` | Progress, guide, history, journal dialogs                                 |
+| `src/styles/`                                                          | Shared foundations, dashboard layout, themes, visual refinements          |
+| `src/i18n/`                                                            | Translation JSON; English is the default locale                           |
+| `public/art/`                                                          | Lossless WebP room, cat, coat, pose, and inventory artwork                |
+| `scripts/check-focus-room.mjs`                                         | Integration check with real WebSocket clients                             |
+| `vite.config.ts`, `uno.config.ts`                                      | Build plugins, file routes, utilities, theme configuration                |
 
 The app uses Solid 2 prerelease APIs. Shared styles load from `Document.tsx` in
 the order `kitty.css`, `dashboard.css`, then `playful.css`; preserve that order.
-Locale-prefixed routes use Rimelight i18n, though some interface copy remains
-inline in components.
+Locale-prefixed routes use `@rimelight/i18n` with full support for the top 10 most used languages worldwide: English (`en`), Romanian (`ro`), Portuguese (`pt`), Spanish (`es`), French (`fr`), German (`de`), Japanese (`ja`), Chinese (`zh`), Hindi (`hi`), and Arabic (`ar`, with automatic RTL text direction). An accessible language selector button is provided in both the header and footer.
 
 Shop previews and the equipped cat reuse each coat's sitting artwork, with
 separate pose sheets and an inventory atlas for items. See
